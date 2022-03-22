@@ -1,142 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Beautiful Bootstrap Navbar with Menu Icons</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<style>
-body {
-	background: #eeeeee;
-	font-family: 'Varela Round', sans-serif;
-}
-.navbar {
-	color: #fff;
-	background: #926dde !important;
-	padding: 5px 16px;
-	border-radius: 0;
-	border: none;
-	box-shadow: 0 0 4px rgba(0,0,0,.1);
-}
-.navbar img {
-	border-radius: 50%;
-	width: 36px;
-	height: 36px;
-	margin-right: 10px;
-}
-.navbar .navbar-brand {
-	color: #efe5ff;
-	padding-left: 0;
-	padding-right: 50px;
-	font-size: 24px;		
-}
-.navbar .navbar-brand:hover, .navbar .navbar-brand:focus {
-	color: #fff;
-}
-.navbar .navbar-brand i {
-	font-size: 25px;
-	margin-right: 5px;
-}
-
-.navbar .nav-item i {
-	font-size: 18px;
-}
-.navbar .nav-item span {
-	position: relative;
-	top: 3px;
-}
-.navbar .navbar-nav > a {
-	color: #efe5ff;
-	padding: 8px 15px;
-	font-size: 14px;		
-}
-.navbar .navbar-nav > a:hover, .navbar .navbar-nav > a:focus {
-	color: #fff;
-	text-shadow: 0 0 4px rgba(255,255,255,0.3);
-}
-.navbar .navbar-nav > a > i {
-	display: block;
-	text-align: center;
-}
-
-.navbar .navbar-nav .active a, .navbar .navbar-nav .active a:hover, .navbar .navbar-nav .active a:focus {
-	color: #fff;
-	text-shadow: 0 0 4px rgba(255,255,255,0.2);
-	background: transparent !important;
-}
-.navbar .navbar-nav .user-action {
-	padding: 9px 15px;
-	font-size: 15px;
-}
-.navbar .navbar-toggle {
-	border-color: #fff;
-}
-.navbar .navbar-toggle .icon-bar {
-	background: #fff;
-}
-.navbar .navbar-toggle:focus, .navbar .navbar-toggle:hover {
-	background: transparent;
-}
-
-.navbar .divider {
-	background-color: #e9ecef !important;
-}
-@media (min-width: 1200px){
-	.form-inline .input-group {
-		width: 350px;
-		margin-left: 30px;
-	}
-}
-@media (max-width: 1199px){
-	.navbar .navbar-nav > a > i {
-		display: inline-block;			
-		text-align: left;
-		min-width: 30px;
-		position: relative;
-		top: 4px;
-	}
-	.navbar .navbar-collapse {
-		border: none;
-		box-shadow: none;
-		padding: 0;
-	}
-	.navbar .navbar-form {
-		border: none;			
-		display: block;
-		margin: 10px 0;
-		padding: 0;
-	}
-	.navbar .navbar-nav {
-		margin: 8px 0;
-	}
-	.navbar .navbar-toggle {
-		margin-right: 0;
-	}
-	.input-group {
-		width: 100%;
-	}
-}
-</style>
-</head> 
-<body>
-<nav class="navbar navbar-expand-xl navbar-dark bg-dark">
-	<a href="#" class="navbar-brand"><i class="fa fa-cube"></i><b>ADDRESS BOOK</b></a>  		
-	<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<!-- Collection of nav links, forms, and other content for toggling -->
-	<div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">		
-		
-		<div class="navbar-nav ml-auto">
-			<a href="##" class="nav-item nav-link"><i class="fa fa-solid fa-user"></i><span>Signup</span></a>	 
-			<a href="##" class="nav-item nav-link"><i class="fa fa-solid fa-arrow-right-to-bracket"></i><span>Login</span></a> 
-		</div>
-	</div>
-</nav>
-</body>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Login</title>		
+	</head> 
+	<body>
+		<cfif (isDefined("url.logout"))>
+                <cfset  StructClear(Session) />
+                <cflocation url="login.cfm" addtoken="No">
+        </cfif>		
+		<cfif structKeyExists(form,'login')>
+			<cfinvoke component="components.login" method="getUsers" returnvariable="result">
+				<cfinvokeargument name="userName"  value = "#form.userName#" />
+				<cfinvokeargument name="password"  value = "#form.password#" />
+			</cfinvoke>  
+			<cfif result.recordcount EQ 1>
+				<cfset Session.LoggedIn = "1">
+				<cfset Session.userName = "#result.userName#">
+				<cfset Session.emailID = "#result.emailID#">    
+				<cflocation url="account.cfm" addtoken="No"> 
+			<cfelse>
+				<cfset errors = "Incorrect Username/Password">										
+				<cfset StructClear(Session)> 
+			</cfif>
+		</cfif>
+		<cfinclude template="header.cfm">
+		<cfparam name="form.userName" default=""> 
+		<cfparam name="form.password" default="">  
+		<section class="myform-area">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-8">
+						<div class="form-area login-form">
+							<div class="form-content">
+								<img src="./images/logoblock.png" class="left-img">
+							</div>
+							<div class="form-input">
+								<h2>LOGIN</h2>
+								<cfif isDefined("errors")>
+									<div class="error"><cfoutput>#errors#</cfoutput></div>
+								</cfif> 
+								<form name="loginForm" method="post">
+									<div class="form-group">
+										<input type="text"  id="userName" name="userName" required>
+										<label>User Name</label>
+									</div>
+									<div class="form-group">
+										<input type="password" id="password" name="password" required>
+										<label>password</label>
+									</div>
+									<div class="myform-button">
+										<button class="myform-btn" name="login" id="login">LOGIN</button>										 
+									</div>
+								</form>
+								<div class="signin-text">Or Sign in Using </div>
+								<div class="social-icon">
+									<svg id="Layer_1" data-name="Layer 1" width="40" height="40" 
+									xmlns="http://www.w3.org/2000/svg" viewBox="0 0 506.86 506.86"><defs><style>.cls-1{fill:#1877f2;}.cls-2{fill:#fff;}</style></defs><title>facebook-round-color</title><path class="cls-1" d="M506.86,253.43C506.86,113.46,393.39,0,253.43,0S0,113.46,0,253.43C0,379.92,92.68,484.77,213.83,503.78V326.69H149.48V253.43h64.35V197.6c0-63.52,37.84-98.6,95.72-98.6,27.73,0,56.73,5,56.73,5v62.36H334.33c-31.49,0-41.3,19.54-41.3,39.58v47.54h70.28l-11.23,73.26H293V503.78C414.18,484.77,506.86,379.92,506.86,253.43Z"/>
+									<path class="cls-2" d="M352.08,326.69l11.23-73.26H293V205.89c0-20,9.81-39.58,41.3-39.58h31.95V104s-29-5-56.73-5c-57.88,0-95.72,35.08-95.72,98.6v55.83H149.48v73.26h64.35V503.78a256.11,256.11,0,0,0,79.2,0V326.69Z"/></svg>
+									<svg xmlns="http://www.w3.org/2000/svg" style="fill:red" width="40" height="40" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 640 640"><path d="M320 0C143.234 0 0 143.234 0 320s143.234 320 320 320 320-143.234 320-320S496.766 0 320 0zm4.76 560.003C192.12 560.003 84.757 452.651 84.757 320c0-132.651 107.364-240.003 240.003-240.003 64.772 0 118.998 23.646 160.774 62.753l-65.115 62.764c-17.894-17.114-49.005-36.992-95.647-36.992C242.78 168.522 176.01 236.4 176.01 320c0 83.6 66.887 151.478 148.762 151.478 95.01 0 130.643-68.233 136.124-103.513l-136.136-.012v-82.241l226.633.012c1.996 12.012 3.768 24.012 3.768 39.768.118 137.116-91.761 234.523-230.353 234.523l-.047-.012z"/></svg>
+								</div>
+								<div class="signup-text">
+									Don't have an account?<span class="reg-text"><a href="./register.cfm" class="register-link"> Register Here<a></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
 </html>
