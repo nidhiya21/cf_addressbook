@@ -30,9 +30,10 @@
                                         <cfinvokeargument name="password"  value = "#form.password#" />
                                     </cfinvoke> 
                                     <cfif result GT 0>
-                                        <script>
-                                        alert("Employee Addedd Successfully");
-                                        </script>
+                                        <cfset Session.LoggedIn = "1">
+										<cfset Session.userName = "#form.userName#">
+										<cfset Session.emailID = "#form.emailID#">    
+										<cflocation url="account.cfm" addtoken="No"> 
                                     </cfif>
                                 </cfif> 
                                 <form name="signup" method="post">
