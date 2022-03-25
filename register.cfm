@@ -33,6 +33,7 @@
                                         <cfset Session.LoggedIn = "1">
 										<cfset Session.userName = "#form.userName#">
 										<cfset Session.emailID = "#form.emailID#">    
+										<cfset Session.userID = "#form.userID#">    
 										<cflocation url="account.cfm" addtoken="No"> 
                                     </cfif>
                                 </cfif> 

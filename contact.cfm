@@ -86,14 +86,9 @@ hr.new1 {
                     <hr class="new1">
 					<div class="row">
                         <div class="col-sm-4">
-							<div class="form-group">
-                            <label for="title">Title<span class="required"></span></label>
-                            <hr>
-                            <select class="form-control" id="title">
-                                <option>Mr</option>
-                                <option>Ms</option>
-                                <option>Mrs</option>
-                            </select>
+							<div class="form-group"> 
+                            <label>Title</label>  : Val
+                            
                             </div>
 						</div>
 						<div class="col-sm-4">

@@ -296,3 +296,27 @@ hr .label-txt{
    align-items: center;
    justify-content: center;
  } 
+ .view-title{
+	font-size: 16px;
+	color: #337ab7;
+	font-weight: 600;
+ }
+ .user-img{
+	width: 23%;
+    height: 18%;
+ }
+ .modal-right{
+	margin-top: -550px;
+    /* padding-top: 6px; */
+    margin-left: 989px;
+    height: 521px;
+	max-width: 200px;
+    background: #d9edf7;
+ }
+ .user-imgpopup{
+	width: 92px;
+    height: 92px;
+	margin-bottom: -129px;
+    margin-top: 109px;
+    margin-left: 47px;
+ }
