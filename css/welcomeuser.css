@@ -285,7 +285,13 @@ hr .label-txt{
 	color: #337ab7;
 	font-weight: 600;
 }
-
+.modal-right-img {   
+    margin-left: 989px;
+    height: 972px;
+	margin-top: -1001px;
+    max-width: 200px;
+    background: #d9edf7;
+}
 #contact-head {
    width: 420px;
    height: 40px;
@@ -320,3 +326,27 @@ hr .label-txt{
     margin-top: 109px;
     margin-left: 47px;
  }
+
+ .btn-add-contact {
+	border: 1px solid;
+    color: white;
+    border-radius: 18px;
+    width: 108px;
+    height: 37px;
+    background: #337ab7;
+    width: 22%;
+    cursor: pointer;
+    transition: all .5s;
+    margin-left: 28px;
+    border-color: #337ab7;
+    border-radius: 50px;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    font-size: 17px;
+}
+.fail-alert{  
+	font-size: 12px!important;
+	color:red!important;
+}

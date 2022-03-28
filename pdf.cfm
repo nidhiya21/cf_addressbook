@@ -1,4 +1,3 @@
-
 <cfinvoke component="components.contact" method="getPdf" returnvariable="result"> 
     <cfinvokeargument name="userID"  value = #Session.userID# />  
 </cfinvoke>
@@ -20,29 +19,41 @@
                     <th>Pincode</th> 
                     <th>Email ID</th> 
                     <th>Phone</th> 
+                    <th>Image</th> 
                 </tr> 
                 <cfoutput> 
                     <tr> 
                         <td><font size="-1"> 
-                        #result.title#  #result.firstName# #result.lastName#</font> 
+                            #result.title#  #result.firstName# #result.lastName#</font> 
                         </td> 
                         <td align="right"><font size="-1"> 
-                        #result.gender#</font> 
+                            #result.gender#</font> 
                         </td> 
                         <td align="right"><font size="-1"> 
-                        #result.dob#</font> 
+                            #result.dob#</font> 
                         </td>
                         <td align="right"><font size="-1"> 
-                        #result.address#, #result.street#</font> 
+                            #result.address#, #result.street#</font> 
                         </td>
                         <td align="right"><font size="-1"> 
-                        #result.pincode#</font> 
+                            #result.pincode#</font> 
                         </td>
                         <td align="right"><font size="-1"> 
-                        #result.email#</font> 
+                            #result.email#</font> 
                         </td>
                         <td align="right"><font size="-1"> 
-                        #result.phoneNumber#</font> 
+                            #result.phoneNumber#</font> 
+                        </td>
+                        <td align="right"><font size="-1"> 
+                            <cfif #result.attachment# NEQ ''>
+                                <img src="./contactimages/#result.attachment#" class="user-img"/>
+                            <cfelse> 
+                                <cfif #result.gender# EQ 'Female'>
+                                    <img src="./images/no-female.jpg" class="user-img">
+                                <cfelse>
+                                    <img src="./images/no-man.png" class="user-img">
+                                </cfif>	
+                            </cfif>
                         </td>
                     </tr>            
                     </cfoutput> 
