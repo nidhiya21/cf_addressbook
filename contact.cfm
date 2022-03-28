@@ -4,76 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Bootstrap Simple Contact Form</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<style>
-body {
-    color: #566787;
-    background: #f5f5f5;
-    font-family: "Open Sans", sans-serif;
-}
-.contact-form {
-    padding: 50px;
-    margin: 30px 0;
-}
-.contact-form h1 {
-    text-transform: uppercase;
-    margin: 0 0 15px;
-}
-.contact-form .form-control, .contact-form .btn  {
-    min-height: 38px;
-    border-radius: 2px;
-}
-.contact-form .btn-primary {
-    min-width: 150px;
-    background: #299be4;
-    border: none;
-}
-.contact-form .btn-primary:hover {
-    background: #1c8cd7; 
-}
-.contact-form label {
-    opacity: 0.9;
-}
-.contact-form textarea {
-    resize: vertical;
-}
-
-.bs-example {
-    margin: 20px;
-}
-.required:after {
-    content:" *";
-    color: red;
-  }
- .form-group input,.form-group select {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid grey;
-  color: black;
-  width: 100%;
-  font-family: "Monsterrat", sans-serif;
-  font-size: 1em;
-  padding: 8px;
-  transition: all 0.5s;
-}
-
-
-form input:focus {
-  background-color: rgb(22, 22, 22);
-  color: white;
-  -webkit-transition: background-color 0.5s;
-  transition: background-color 0.5s;
-}
-hr.new1 {
-  border-top: 3px solid black;
-}
-</style>
-
+<cfinclude template="common.cfm">	
+<link href="./css/contact.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div class="container-xl">
@@ -98,16 +30,16 @@ hr.new1 {
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group ">
-								<label for="inputFirstName">First Name<span class="required"></span></label>
+								<label for="inputFirstName">First Name<span class="required"></span></label> 
                                 <hr>
-								<input type="text" class="form-control" id="inputFirstName" placeholder="Your First Name" required>
+								<input type="text" class="form-control" id="inputFirstName" placeholder="Your First Name" >
 							</div>
 						</div>
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label for="inputLastName">Last Name<span class="required"></span></label>
                                 <hr>
-								<input type="text" class="form-control" id="inputLastName" placeholder="Your Last Name"  required>
+								<input type="text" class="form-control" id="inputLastName" placeholder="Your Last Name"  >
 							</div>
 						</div>
 					</div>  
@@ -143,14 +75,14 @@ hr.new1 {
 							<div class="form-group ">
 								<label for="inputFirstName">Address<span class="required"></span></label>
                                 <hr>
-								<input type="text" class="form-control" id="inputFirstName" placeholder="Your Address" required>
+								<input type="text" class="form-control" id="inputFirstName" placeholder="Your Address" >
 							</div>
 						</div>
-						<div class="col-sm-6">
+						<div class="col-sm-6"> 
 							<div class="form-group">
 								<label for="inputLastName">Street<span class="required"></span></label>
                                 <hr>
-								<input type="text" class="form-control" id="inputLastName" placeholder="Your Street"  required>
+								<input type="text" class="form-control" id="inputLastName" placeholder="Your Street"  >
 							</div>
 						</div>
 					</div>               

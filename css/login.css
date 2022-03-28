@@ -113,7 +113,7 @@ a,a:hover{
     position: relative;
     background: #337ab7;
     width: 95%;
-    height: 550px;
+    /* height: 550px; */
     overflow: hidden;
     box-shadow: 0 0 40px 0 #e1e1e1;
     border-radius: 15px;
@@ -196,14 +196,14 @@ a,a:hover{
 .myform-area .form-area .form-input input:focus,
 .myform-area .form-area .form-input textarea:focus,
 .myform-area .form-area .form-input input:valid,
-.myform-area .form-area .form-input textarea:valid{
+/* .myform-area .form-area .form-input textarea:valid{
     border-bottom: 2px solid rgba(103,58,183);
-}
-.myform-area .form-area .form-text{
+} */
+/* .myform-area .form-area .form-text{
     margin-top: 30px;
-}
+} */
 .myform-area .form-area .form-text span a{
-    color: rgba(103,58,183);
+    /* color: rgba(103,58,183); */
 }
 .myform-area .form-area .myform-button{
     margin-top: 48px;
@@ -282,4 +282,15 @@ a,a:hover{
 .nav-links{
     text-decoration: none;
     color: white;
+}
+.error1  {
+    border-bottom-color: red;
+}
+
+.success {
+    border-bottom-color:green;
+}
+
+.err {
+    color: red;
 }

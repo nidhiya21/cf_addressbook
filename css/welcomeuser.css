@@ -285,7 +285,13 @@ hr .label-txt{
 	color: #337ab7;
 	font-weight: 600;
 }
-
+.modal-right-img {   
+    margin-left: 989px;
+    height: 972px;
+	margin-top: -1001px;
+    max-width: 200px;
+    background: #d9edf7;
+}
 #contact-head {
    width: 420px;
    height: 40px;
@@ -296,3 +302,51 @@ hr .label-txt{
    align-items: center;
    justify-content: center;
  } 
+ .view-title{
+	font-size: 16px;
+	color: #337ab7;
+	font-weight: 600;
+ }
+ .user-img{
+	width: 23%;
+    height: 18%;
+ }
+ .modal-right{
+	margin-top: -550px;
+    /* padding-top: 6px; */
+    margin-left: 989px;
+    height: 521px;
+	max-width: 200px;
+    background: #d9edf7;
+ }
+ .user-imgpopup{
+	width: 92px;
+    height: 92px;
+	margin-bottom: -129px;
+    margin-top: 109px;
+    margin-left: 47px;
+ }
+
+ .btn-add-contact {
+	border: 1px solid;
+    color: white;
+    border-radius: 18px;
+    width: 108px;
+    height: 37px;
+    background: #337ab7;
+    width: 22%;
+    cursor: pointer;
+    transition: all .5s;
+    margin-left: 28px;
+    border-color: #337ab7;
+    border-radius: 50px;
+    color: white;
+    padding-top: 5px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    font-size: 17px;
+}
+.fail-alert{  
+	font-size: 12px!important;
+	color:red!important;
+}

@@ -3,27 +3,35 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>Login</title>		
+		<title>Login</title>	
+		<cfinclude template="common.cfm">	
+		<script src="./js/account.js"></script> 
 	</head> 
-	<body>
-		<cfif (isDefined("url.logout"))>
-                <cfset  StructClear(Session) />
-                <cflocation url="login.cfm" addtoken="No">
-        </cfif>		
+	<body>	
 		<cfif structKeyExists(form,'login')>
-			<cfinvoke component="components.login" method="getUsers" returnvariable="result">
-				<cfinvokeargument name="userName"  value = "#form.userName#" />
-				<cfinvokeargument name="password"  value = "#form.password#" />
-			</cfinvoke>  
-			<cfif result.recordcount EQ 1>
-				<cfset Session.LoggedIn = "1">
-				<cfset Session.userName = "#result.userName#">
-				<cfset Session.emailID = "#result.emailID#">    
-				<cflocation url="account.cfm" addtoken="No"> 
-			<cfelse>
-				<cfset errors = "Incorrect Username/Password">										
+			<cfif form.userName EQ '' or  form.password EQ ''>
+				<cfinvoke component="components.login" method="validateLogin" returnvariable="validationRes">
+					<cfinvokeargument name="userName"  value = "#form.userName#" />
+					<cfinvokeargument name="password"  value = "#form.password#" />
+				</cfinvoke>
+				<cfset errors = #validationRes#>
 				<cfset StructClear(Session)> 
-			</cfif>
+			<cfelse>
+				<cfinvoke component="components.login" method="getUsers" returnvariable="result">
+					<cfinvokeargument name="userName"  value = "#form.userName#" />
+					<cfinvokeargument name="password"  value = "#form.password#" />
+				</cfinvoke>  
+				<cfif result.recordcount EQ 1>
+					<cfset Session.LoggedIn = "1">
+					<cfset Session.userName = "#result.userName#">
+					<cfset Session.emailID = "#result.emailID#">  
+					<cfset Session.userID = "#result.userID#">    
+					<cflocation url="account.cfm" addtoken="No"> 
+				<cfelse>
+					<cfset errors = "Incorrect Username/Password">										
+					<cfset StructClear(Session)> 
+				</cfif>
+			</cfif>	
 		</cfif>
 		<cfinclude template="header.cfm">
 		<cfparam name="form.userName" default=""> 
@@ -43,12 +51,12 @@
 								</cfif> 
 								<form name="loginForm" method="post">
 									<div class="form-group">
-										<input type="text"  id="userName" name="userName" required>
+										<input type="text"  id="userName" name="userName" placeholder="User Name">
 										<label>User Name</label>
 									</div>
 									<div class="form-group">
-										<input type="password" id="password" name="password" required>
-										<label>password</label>
+										<input type="password" id="password" name="password"  placeholder="Password">
+										<label>Password</label>
 									</div>
 									<div class="myform-button">
 										<button class="myform-btn" name="login" id="login">LOGIN</button>										 

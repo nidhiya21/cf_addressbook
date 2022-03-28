@@ -3,7 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>Register</title>		
+		<title>Register</title>	
+		<cfinclude template="common.cfm">		
 	</head> 
 	<body>
 		<cfinclude template="header.cfm">
@@ -21,52 +22,43 @@
                                 <cfparam name="form.emailID" default=""> 
                                 <cfparam name="form.userName" default=""> 
                                 <cfparam name="form.password" default=""> 
-                                <cfparam name="form.confirmpassword" default=""> 
-                                <cfif structKeyExists(form,'saveForm')>
-                                    <cfinvoke component="components.login" method="saveUser" returnvariable="result">
-                                        <cfinvokeargument name="fullName"  value = "#form.fullName#" />
-                                        <cfinvokeargument name="emailID"  value = "#form.emailID#" />
-                                        <cfinvokeargument name="userName"  value = "#form.userName#" />
-                                        <cfinvokeargument name="password"  value = "#form.password#" />
-                                    </cfinvoke> 
-                                    <cfif result GT 0>
-                                        <cfset Session.LoggedIn = "1">
-										<cfset Session.userName = "#form.userName#">
-										<cfset Session.emailID = "#form.emailID#">    
-										<cflocation url="account.cfm" addtoken="No"> 
-                                    </cfif>
-                                </cfif> 
-                                <form name="signup" method="post">
-									<div class="form-group">
-										<input type="text"  id="fullName" name="fullName" required>
+                                <cfparam name="form.confirmpassword" default="">                               
+                                <form name="signup" method="post" id="signup">
+									<div class="form-group form-field">
+										<input type="text"  id="fullName" name="fullName" placeholder="Full Name">
 										<label>Full Name</label>
+										<small class="err"></small>
 									</div>
-                                    <div class="form-group">
-										<input type="email"  id="emailID" name="emailID" required>
+                                    <div class="form-group form-field">
+										<input type="email"  id="emailID" name="emailID"   placeholder="Email ID">
 										<label>Email ID</label>
+										<small class="err"></small>
 									</div>
-                                    <div class="form-group">
-										<input type="text"  id="userName" name="userName" required>
+                                    <div class="form-group form-field">
+										<input type="text"  id="userName" name="userName"  placeholder="Username"> 
 										<label>Username</label>
+										<small class="err"></small>
 									</div>
-									<div class="form-group">
-										<input type="password" id="password" name="password" required>
+									<div class="form-group form-field">
+										<input type="password" id="password" name="password"  placeholder="Password">
 										<label>Password</label>
+										<small class="err"></small>
 									</div>
-                                    <div class="form-group">
-										<input type="password" id="confirmpassword" name="confirmpassword" required>
+                                    <div class="form-group form-field">
+										<input type="password" id="confirmpassword" name="confirmpassword"  placeholder="Confirm Password">
 										<label>Confirm Password</label>
+										<small class="err"></small>
 									</div>
 									<div class="myform-button">
-										<button class="myform-btn" id="saveForm" name="saveForm" >REGISTER</button>
+										<button class="myform-btn" id="saveForm" name="saveForm"  >REGISTER</button>
 									</div>
-								</form>
-								
+								</form>								
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
         </section>
+	<cfinclude template="footer.cfm">
 	</body>
 </html>
