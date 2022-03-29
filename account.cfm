@@ -5,16 +5,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>Account</title>	
         <link href="./css/welcomeuser.css" rel="stylesheet" type="text/css"/>
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
 		<cfinclude template="common.cfm">
-
-
 		<script src="./js/account.js"></script>		
 	</head> 
 	<body>
         <cfinclude template="header.cfm">
 		<cfinvoke component="components.contact" method="getContacts" returnvariable="result"> 
+			<cfinvokeargument name="userID"  value = #Session.userID# /> 
+		</cfinvoke> 
+		<cfinvoke component="components.contact" method="getContactsList" returnvariable="contactList"> 
 			<cfinvokeargument name="userID"  value = #Session.userID# /> 
 		</cfinvoke> 
         <div class="container-xl">
@@ -36,10 +35,14 @@
 								</div>							
 							</div>
 					</div>			
-                <div class="pfl-block">
-                    <div class="avatar">
-                        <img src="./images/user-icon.jpg" alt="Avatar">
-                    </div>					
+                <div class="pfl-block profile-badge">
+                    <div class="avatar profile-pic">
+                        <img src="./images/user-icon.jpg" alt="Avatar" id="profile-image1"> 
+						<cfset userID="#Session.userID#"/>
+						<form action="" method="post" name="userImgUpload">
+							<input id="userImg" name="userImg" class="hidden" type="file" onchange="previewFile(<cfoutput>#userID#</cfoutput>)" >
+						</form>
+					</div>					
                     <div class="username">
                         <cfoutput>#Session.userName#</cfoutput>
                     </div> 					
@@ -62,35 +65,37 @@
 								</tr>
 							</thead>
 							<tbody>
-								<cfoutput query="result" > 
+								<cfloop array="#contactList#"  item="contactList"> 
+									<cfoutput>
 									<tr>
 										<td>
-										<cfif #result.attachment# NEQ ''>
-											<img src="./contactimages/#result.attachment#" class="user-img"/>
+										<cfif #contactList.getAttachment()# NEQ ''>
+											<img src="./contactimages/#contactList.getAttachment()#" class="user-img"/>
 										<cfelse> 
-											<cfif #result.gender# EQ 'Female'>
+											<cfif #contactList.getgender()# EQ 'Female'>
 												<img src="./images/no-female.jpg" class="user-img">
 											<cfelse>
 												<img src="./images/no-man.png" class="user-img">
 											</cfif>	
 										</cfif>
 										</td>
-										<td>#result.firstName# #result.lastName#</td>
-										<td>#result.email#</td>
-										<td>#result.phoneNumber#</td>
+										<td>#contactList.getfirstName()# #contactList.getlastName()#</td>
+										<td>#contactList.getemail()#</td>
+										<td>#contactList.getphoneNumber()#</td>
 										<td>
 											<!--<a href="" class="edit modal-trigger-edit"   data-toggle="modal" data-id=#result.contactID#  data-target=".editEmployeeModal_#result.contactID#">-->
-											<a href="##addEmployeeModal" class="edit modal-trigger-edit"  data-id=#result.contactID#  data-toggle="modal">
+											<a href="##addEmployeeModal" class="edit modal-trigger-edit"  data-id=#contactList.getcontactID()#  data-toggle="modal">
 											<span class="modal-txt">EDIT</span></a>
 										</td>
 										<td>
-											<a href="" class="delete modal-trigger"   data-toggle="modal" data-id=#result.contactID# data-target=".deleteEmployeeModal"><span class="modal-txt">DELETE</span></a>
+											<a href="" class="delete modal-trigger"   data-toggle="modal" data-id=#contactList.getcontactID()# data-target=".deleteEmployeeModal"><span class="modal-txt">DELETE</span></a>
 										</td>
 										<td>
-											<a href="" class="view modal-trigger-view"   data-toggle="modal" data-id=#result.contactID#  data-target=".viewEmployeeModal_#result.contactID#"><span class="modal-txt">VIEW</span></a>
+											<a href="" class="view modal-trigger-view"   data-toggle="modal" data-id=#contactList.getcontactID()#  data-target=".viewEmployeeModal_#contactList.getcontactID()#"><span class="modal-txt">VIEW</span></a>
 										</td>
 									</tr>
-								</cfoutput>	
+									</cfoutput>
+								</cfloop>	
 							</tbody>
 						</table>					
 					</div>
@@ -112,10 +117,32 @@
 					<cfparam name="form.email" default=""> 
 					<cfparam name="form.phoneNumber" default=""> 
 					<cfparam name="form.pincode" default=""> 
+					<cfif structKeyExists(form,'formContactSubmit')>
+						<cfif form.title EQ '' or  form.firstName EQ '' or  form.lastName EQ '' or  form.gender EQ '' or  
+						form.dob EQ '' or  form.address EQ ''or  form.street EQ '' or  form.email EQ '' or  form.phoneNumber EQ ''  or  form.pincode EQ ''>
+							<cfinvoke component="components.contact" method="validateContact" returnvariable="validationRes">
+								<cfinvokeargument name="title"  value = "#form.title#" />
+								<cfinvokeargument name="firstName"  value = "#form.firstName#" />
+								<cfinvokeargument name="lastName"  value = "#form.lastName#" />
+								<cfinvokeargument name="gender"  value = "#form.gender#" />
+								<cfinvokeargument name="dob"  value = "#form.dob#" />
+								<cfinvokeargument name="address"  value = "#form.address#" />
+								<cfinvokeargument name="street"  value = "#form.street#" />
+								<cfinvokeargument name="email"  value = "#form.email#" />
+								<cfinvokeargument name="phoneNumber"  value = "#form.phoneNumber#" />
+								<cfinvokeargument name="pincode"  value = "#form.pincode#" />
+							</cfinvoke> 
+							<cfset errors = #validationRes#>
+							<cfset StructClear(Session)> 
+						</cfif>
+					</cfif>	
 					<form action="" method="post" name="contact" id="contact" enctype="multipart/form-data">
 						<div class="modal-header">						
 							<div id="contact-head"><h4 class="modal-title">CREATE CONTACT</h4></div>	
 						</div>
+						<cfif isDefined("errors")>
+							<div class="error"><cfoutput>#errors#</cfoutput></div>
+						</cfif>
 						<div class="modal-body">
 							<input type="hidden" id="userID" name="userID" value= <cfoutput>#Session.userID#</cfoutput> />
 							<input type="hidden" id="contactID" name="contactID" value="" />
@@ -219,16 +246,17 @@
 						</div>						
 						<div class="modal-footer">
 							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-							<input type="submit" name="formContactSubmit" class=" btn-add-contact formContactSubmit" value="Add">
+							<input type="submit" name="formContactSubmit" id ="formContactSubmit" class=" btn-add-contact formContactSubmit" value="Add">
 						</div>
 					</form>
+					<div class="modal-right-img">
+						<div class="img-popup">
+								<img src="./images/no-man.png" class="user-imgpopup" id="edit-imgsrc"/> 	
+						</div>	
+					</div>
 				</div>
 			</div>
-			<div class="modal-right-img">
-				<div class="img-popup">
-						<img src="./images/no-man.png" class="user-imgpopup" id="edit-imgsrc"/> 	
-				</div>	
-			</div>
+		
 		</div>
 		<!-- View Modal HTML -->
 		<cfinvoke component="components.contact" method="getContacts" returnvariable="result"> 
@@ -238,11 +266,11 @@
 		<div id="viewEmployeeModal_#result.contactID#" class="modal fade viewEmployeeModal_#result.contactID#">
 			<div class="modal-dialog">
 				<form method="post" action="" enctype="multipart/form-data" >
-					<div class="modal-content">
+					<div class="modal-content viewcontent">
 						<div class="modal-header">
 							<div id="contact-head"><h4 class="modal-title">CONTACT DETAILS</h4></div>
 						</div>
-						<div class="modal-body"> 
+						<div class="modal-body viewbody"> 
 							<div class="row">
 								<div class="col-md-3 view-title">
 									Name 
@@ -300,31 +328,34 @@
 								</div>
 							</div>							
 						</div>						
-						<div class="modal-footer">
-								<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<div class="modal-footer viewfooter">
+							<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						</div>
+					    <div class="modal-right">
+							<div class="img-popup">
+								<cfif #result.attachment# NEQ ''>
+									<img src="./contactimages/#result.attachment#" class="user-imgpopup"/>
+								<cfelse> 
+									<cfif #result.gender# EQ 'Female'>
+										<img src="./images/no-female.jpg" class="user-imgpopup">
+									<cfelse>
+										<img src="./images/no-man.png" class="user-imgpopup">
+									</cfif>	
+								</cfif>
+							</div>	
 						</div>
 					</div>
+					
 				</form>
+				
 			</div>
-			<div class="modal-right">
-				<div class="img-popup">
-					<cfif #result.attachment# NEQ ''>
-						<img src="./contactimages/#result.attachment#" class="user-imgpopup"/>
-					<cfelse> 
-						<cfif #result.gender# EQ 'Female'>
-							<img src="./images/no-female.jpg" class="user-imgpopup">
-						<cfelse>
-							<img src="./images/no-man.png" class="user-imgpopup">
-						</cfif>	
-					</cfif>
-				</div>	
-			</div>
+			
 		</div>
 		</cfoutput>
 		<!-- Delete Modal HTML -->
 		<div id="deleteEmployeeModal" class="modal fade deleteEmployeeModal">
 			<div class="modal-dialog">
-				<div class="modal-content">
+				<div class="modal-content dltcontent">
 					<form action="" method="post">
 						<div class="modal-contentVal">
 							<input type="hidden" id="contactIDVal" name="contactIDVal" value="" />

@@ -112,14 +112,13 @@ table.table .avatar {
 	max-width: 500px;
 }
 .modal .modal-header, .modal .modal-body, .modal .modal-footer {
-	padding: 20px 30px;
+	/* padding: 20px 30px; */
 }
 .modal .modal-content {
 	border-radius: 3px;
 	font-size: 14px;
 }
 .modal .modal-footer {
-	background: #ecf0f1;
 	border-radius: 0 0 3px 3px;
 }
 .modal .modal-title {
@@ -286,10 +285,9 @@ hr .label-txt{
 	font-weight: 600;
 }
 .modal-right-img {   
-    margin-left: 989px;
-    height: 972px;
-	margin-top: -1001px;
-    max-width: 200px;
+	margin-left: 25px;
+    height: 969px;
+    max-width: 165px;
     background: #d9edf7;
 }
 #contact-head {
@@ -313,20 +311,18 @@ hr .label-txt{
  }
  .modal-right{
 	margin-top: -550px;
-    /* padding-top: 6px; */
     margin-left: 989px;
     height: 521px;
 	max-width: 200px;
     background: #d9edf7;
  }
- .user-imgpopup{
-	width: 92px;
+ .user-imgpopup {
+    width: 91px;
     height: 92px;
-	margin-bottom: -129px;
-    margin-top: 109px;
-    margin-left: 47px;
- }
-
+    margin-top: 134px;
+    margin-left: 38px;
+    margin-right: 21px;
+}
  .btn-add-contact {
 	border: 1px solid;
     color: white;
@@ -349,4 +345,20 @@ hr .label-txt{
 .fail-alert{  
 	font-size: 12px!important;
 	color:red!important;
+}
+.dltcontent{
+	width: 400px!important;
+}
+.viewbody{
+	margin-right: -63px;
+    margin-left: -367px;
+    margin-top: 53px;
+}
+.viewcontent{
+	width:502px!important;
+}
+.viewfooter{
+	height: 0px;
+    margin-bottom: 53px;
+    margin-top: 402px;
 }

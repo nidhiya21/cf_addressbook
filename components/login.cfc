@@ -7,7 +7,7 @@
         <cfquery name="Local.saveToaddressbook" result="userResult">
             INSERT INTO addressbook
             ( 
-            fullName,emailID,userName,password
+            fullName,emailID,userName,password,userImage
             )
             VALUES 
             ( 
@@ -15,6 +15,7 @@
             ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.emailID#" />
             ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.userName#" />
             ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#hash(arguments.password)#" />
+            ,<cfqueryparam cfsqltype="cf_sql_varchar" value="" />
             )
         </cfquery>
         <cfset variables.getID = #userResult.generated_key#> 
