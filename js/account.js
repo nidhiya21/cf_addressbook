@@ -65,24 +65,24 @@ $(document).on("click", ".modal-trigger-edit", function () {
                         var now = new Date(dataInJson.items[0].dob);
                         var day = ("0" + now.getDate()).slice(-2);
                         var month = ("0" + (now.getMonth() + 1)).slice(-2);
-                       var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
-                       $(".modal-content #dob").val(today);
-                        if(dataInJson.items[0].attachment){
-                            var editSrc = "./contactimages/"+dataInJson.items[0].attachment;
-                            $("#edit-imgsrc").attr('src', editSrc);   
-                        }else{
-                            if(dataInJson.items[0].gender =="Male"){
-                                var editSrc = "./images/no-man.png";
-                                $("#edit-imgsrc").attr('src', editSrc); 
+                        var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+                        $(".modal-content #dob").val(today);
+                            if(dataInJson.items[0].attachment){
+                                var editSrc = "./contactimages/"+dataInJson.items[0].attachment;
+                                $("#edit-imgsrc").attr('src', editSrc);   
                             }else{
-                                var editSrc = "./images/no-female.jpg";
-                                $("#edit-imgsrc").attr('src', editSrc); 
-                            } 
-                        }
-                        } 
-                        else {                  
-                            alert('Error!');    
-                        }                    
+                                if(dataInJson.items[0].gender =="Male"){
+                                    var editSrc = "./images/no-man.png";
+                                    $("#edit-imgsrc").attr('src', editSrc); 
+                                }else{
+                                    var editSrc = "./images/no-female.jpg";
+                                    $("#edit-imgsrc").attr('src', editSrc); 
+                                } 
+                            }
+                    } 
+                    else {                  
+                        alert('Error!');    
+                    }                    
             }
      }); 
 });
@@ -163,8 +163,8 @@ $(document).on("click", ".formContactSubmit", function () {
             pincode: pincode,
             contactID: contactID
         },
-        success: function(objResponse ) { 
-            if (objResponse.SUCCESS){ 
+        success: function(objResponse) { 
+            if (objResponse){ 
                 alert('Contact Updated successfully');           
             } 
             else {       
@@ -214,47 +214,40 @@ $(document).ready(function() {
     });
 });
 
-$(document).on("click", ".formEditContactSubmit", function () {
-    var formData = $('#addContact').serialize();
-    var userID = $('#userID').val();
-    var title = $('#title').val();
-    var firstName = $('#firstName').val();
-    var lastName = $('#lastName').val();
-    var gender = $('#gender').val();
-    var dob = $('#dob').val();
-    var attachment =12;
-    var address = $('#address').val();
-    var street = $('#street').val();
-    var email = $('#email').val();
-    var phoneNumber = $('#phoneNumber').val();
-    var pincode = $('#pincode').val();
+
+function previewFile(userID) {
+    var preview = document.querySelector('img');
+    var file    = document.querySelector('input[type=file]').files[0];
+    var reader  = new FileReader(); 
+    reader.addEventListener("load", function () {
+      preview.src = reader.result;
+    }, false);
+  
+    if (file) {
+     // console.log(file['name']);
+    var userID = userID;
+    var userImg = file['name'];
+    reader.readAsDataURL(file);
 	$.ajax({
-    type:"POST",   
-    url: 'components/contact.cfc', 
-    async: false,
-    dataType: "json",  
-    data: {
-            method: "insertContact",
-            userID: userID,
-            title: title,
-            firstName: firstName,
-            lastName: lastName,
-            gender: gender,
-            dob: dob,
-            attachment: attachment,
-            address: address,
-            street: street,
-            email: email,
-            phoneNumber: phoneNumber,
-            pincode: pincode
-        },
-        success: function(objResponse ) { 
-            if (objResponse.SUCCESS){ 
-                alert('Contact Updated successfully');           
-            } 
-            else {       
-                alert('Error in updation,Please try again!');  
-            }                    
-        }
-    }); 
-});
+        type:"POST",   
+        url: 'components/contact.cfc', 
+        async: false,
+        dataType: "json",  
+        enctype: 'multipart/form-data',
+        data: {
+                method: "updateProfile",
+                userID: userID,
+                userImg: userImg   
+            },
+            success: function(objResponse ) { 
+                             
+            }
+        }); 
+  
+    }
+   }
+    $(function() {
+        $('#profile-image1').on('click', function() {
+          $('#userImg').click();
+        });
+    });
