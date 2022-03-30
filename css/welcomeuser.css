@@ -306,7 +306,7 @@ hr .label-txt{
 	font-weight: 600;
  }
  .user-img{
-	width: 23%;
+	width: 34%;
     height: 18%;
  }
  .modal-right{
@@ -347,7 +347,7 @@ hr .label-txt{
 	color:red!important;
 }
 .dltcontent{
-	width: 400px!important;
+	width: 371px!important;
 }
 .viewbody{
 	margin-right: -63px;
@@ -359,6 +359,28 @@ hr .label-txt{
 }
 .viewfooter{
 	height: 0px;
-    margin-bottom: 53px;
-    margin-top: 402px;
+    /* margin-bottom: 53px; */
+    margin-top: 434px;
+    width: 180px;
+	margin-left: 218px;
+    margin-right: -199px;
+}
+.desc{
+	margin-right: -488px!important
+}
+.modal-right-view{
+	margin-top: 0px;
+    margin-left: 263px;
+    height: 521px;
+    max-width: 194px;
+    background: #d9edf7;
+}
+
+
+.user-imgpopup-view {
+    width: 72px;
+    height: 87px;
+    margin-top: 63px;
+    margin-left: 70px;
+    margin-right: 124px;
 }

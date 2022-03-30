@@ -29,14 +29,12 @@ $(document).ready(function() {
              address: "Please enter  Address",
              street: "Please enter Street",
              pincode: "Please enter  Pincode"
-        },
-        
+        },       
     });
 });
 $(document).on("click", ".modal-trigger", function () {
 	var contactID = $(this).data('id');
-	$(".modal-contentVal #contactIDVal").val(contactID);
-    
+	$(".modal-contentVal #contactIDVal").val(contactID);   
 });
 $(document).on("click", ".modal-trigger-edit", function () {
 	var contactID = $(this).data('id');
@@ -213,41 +211,38 @@ $(document).ready(function() {
         
     });
 });
-
-
+$("#userImgUpload").submit(function(e) {
+    e.preventDefault();
+});
+$(function() {
+    $('#profile-image1').on('click', function() {
+        $('#userImg').click();
+    });
+});
 function previewFile(userID) {
     var preview = document.querySelector('img');
     var file    = document.querySelector('input[type=file]').files[0];
-    var reader  = new FileReader(); 
-    reader.addEventListener("load", function () {
-      preview.src = reader.result;
-    }, false);
-  
+    //var reader  = new FileReader(); 
+    // reader.addEventListener("load", function () {
+    //   preview.src = reader.result;
+    // }, false);
+   // console.log(document.getElementById("userImgUpload"));
+    var fd = new FormData(document.getElementById("userImgUpload"));
+    console.log(fd);    
     if (file) {
      // console.log(file['name']);
     var userID = userID;
-    var userImg = file['name'];
-    reader.readAsDataURL(file);
+    // reader.readAsDataURL(file);   
 	$.ajax({
-        type:"POST",   
-        url: 'components/contact.cfc', 
-        async: false,
-        dataType: "json",  
-        enctype: 'multipart/form-data',
-        data: {
-                method: "updateProfile",
-                userID: userID,
-                userImg: userImg   
-            },
-            success: function(objResponse ) { 
-                             
-            }
-        }); 
   
+            url: "components/contact.cfc?method=updateProfile",
+            type: "POST",
+            data: fd,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false
+        }).done(function(data) {
+           $('#profile-image1').attr('src', 'userimage/' + file['name']);
+        })  
     }
-   }
-    $(function() {
-        $('#profile-image1').on('click', function() {
-          $('#userImg').click();
-        });
-    });
+}

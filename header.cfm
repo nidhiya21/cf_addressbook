@@ -1,4 +1,3 @@
-
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
 	<a href="##" class="navbar-brand"><img src="./images/logoblock.png" class="">ADDRESS BOOK</a>  		
 	<div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">		

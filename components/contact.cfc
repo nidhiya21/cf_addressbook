@@ -68,7 +68,7 @@
         </cfif>
         <cfreturn variables.result>
      </cffunction> 
-    <!---add new pcontactge --->
+    <!---add new contact page --->
     <cffunction name="insertContact" access="remote"  output="false"  returntype="any" returnformat="JSON">
         <cfargument name="userID" ype="numeric">
         <cfargument name="title" type="string">
@@ -84,7 +84,7 @@
         <cfargument name="pincode" ype="numeric">
         <cfargument name="contactID" ype="numeric">
         <cfif #arguments.contactID# NEQ ''>
-            <cfquery name = "updateContact"  result="res">
+            <cfquery name = "local.updateContact"  result="res">
                 update contacts
                 set    userID= <cfqueryparam value = "#arguments.userID#" cfsqltype = "cf_sql_varchar">,
                 title= <cfqueryparam value = "#arguments.title#" cfsqltype = "cf_sql_varchar">,
@@ -98,7 +98,7 @@
                 email=<cfqueryparam value = "#arguments.email#" cfsqltype = "cf_sql_varchar">,
                 phoneNumber=<cfqueryparam value = "#arguments.phoneNumber#" cfsqltype = "cf_sql_varchar"/>,
                 pincode=<cfqueryparam value = "#arguments.pincode#" cfsqltype = "cf_sql_integer"/>
-                where contactID= <cfqueryparam value = "#arguments.contactID#" cfsqltype = "cf_sql_integer" >
+                where contactID= <cfqueryparam value = "#arguments.contactID#" cfsqltype = "cf_sql_integer"/>
             </cfquery>
             <cfif IsDefined("updateContact.RecordCount")>
                 <cfset Response = true />       
@@ -140,8 +140,7 @@
     <cffunction name="getContactsList" access="public" output="false" returnType="any">	 
     <cfargument name="userID" type="numeric" required="yes" > 
        <cfset variables.contactArr = ORMExecuteQuery("from contacts where userID=#arguments.userID#")> 
-
-        <cfreturn variables.contactArr/>  
+       <cfreturn variables.contactArr/>  
     </cffunction>  
     <!---delete contacts --->
     <cffunction name="deleteContact" access="remote" returntype="struct" returnformat="json"  output="false">
@@ -160,8 +159,8 @@
     <!---get contacts by id--->
     <cffunction name="getContactsByID" access="remote"  output="false"  returntype="any" returnformat="JSON" >   	 
         <cfargument name="contactID" type="numeric" required="yes" > 
-            <cfset retVal = ArrayNew(1)>
-            <cfquery name = "contactDetails"> 
+            <cfset variables.retVal = ArrayNew(1)>
+            <cfquery name = "local.contactDetails"> 
                 SELECT *
                 FROM contacts
                 where contactID=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.contactID#">
@@ -182,9 +181,9 @@
                 <cfset temp['dob']=contactDetails.dob />
                 <cfset ArrayAppend(retval, temp)>
             </cfloop>
-                <cfset result = {} />
-                <cfset result['items'] = retVal />
-                <cfreturn result> 
+            <cfset result = {} />
+            <cfset result['items'] = retVal />
+            <cfreturn result> 
     </cffunction>  
     <!---get excel--->
     <cffunction name="getExcel" access="remote"  output="false"  >   	 
@@ -228,23 +227,29 @@
             <cfreturn local.pdfData/>       
     </cffunction>  
      <!---update profile image --->
-    <cffunction name="updateProfile" access="remote"  output="yes"  returnType="any" returnFormat="JSON" >	 
-    <cfargument name="userID" type="numeric" required="yes" >
-    <cfargument name="userImg" type="string"  >
-    <cfset variables.validMimeTypes =  {
-                                'image/jpeg': {extension: 'jpg'}
-                                ,'image/png': {extension: 'png'},'image/jpg': {extension: 'jpg'}
-                                    } />
-    <cfset variables.thisPath=expandPath('.') & '/userimage/'>
-    <cfset variables.f_dir=GetDirectoryFromPath(variables.thisPath)>
-    <cffile action="upload" filefield="userImg" destination="#variables.f_dir#"
-    nameconflict="makeunique" result="uploadResult">
-    <cfquery name = "updateContact" result="res"> 
-        update addressbook
-        set 
-        userImage= <cfqueryparam value = "#arguments.userImg#" cfsqltype = "cf_sql_varchar">
-        where userID= <cfqueryparam value = "#arguments.userID#" cfsqltype = "cf_sql_integer">
-    </cfquery>          
-    <cfreturn uploadResult>
-    </cffunction> 
+    
+    <cffunction name="updateProfile" access="remote" output="false" >	
+        <cfset variables.thisPath=expandPath('..') & '/userimage/' />
+            <cfset variables.f_dir=GetDirectoryFromPath(variables.thisPath) />
+		<cffile action="upload" filefield="userImg"  destination="#variables.f_dir#" mode="777" nameconflict="makeunique" result="uploadResult">	
+		<cfif uploadResult.fileWasSaved>
+			<cfset variables.user_imge = #uploadResult.serverFile#>
+            <cfquery name = "local.updateContact" result="res">  
+                update addressbook 
+                set 
+                userImage= <cfqueryparam value = "#variables.user_imge#" cfsqltype = "cf_sql_varchar">
+                where userID= <cfqueryparam value = "#session.userID#" cfsqltype = "cf_sql_integer">
+            </cfquery> 
+		</cfif>					
+	</cffunction>
+      <!---get user image--->
+    <cffunction name="getUserImage" access="public"  output="false"  >   	 
+        <cfargument name="userID" type="numeric" required="yes" >    
+            <cfquery name = "local.userImage"> 
+                SELECT userImage
+                FROM addressbook
+                where userID =<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.userID#">
+            </cfquery>
+            <cfreturn local.userImage/>       
+    </cffunction>  
 </cfcomponent> 

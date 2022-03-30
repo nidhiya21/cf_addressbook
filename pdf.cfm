@@ -56,8 +56,8 @@
                             </cfif>
                         </td>
                     </tr>            
-                    </cfoutput> 
-                </table> 
+                </cfoutput> 
+            </table> 
         </cfdocumentsection> 
     </cfoutput> 
 </cfdocument> 

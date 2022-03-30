@@ -50,7 +50,6 @@ const checkConfirmPassword = () => {
     // check confirm password
     const confirmPassword = confirmPasswordEl.value.trim();
     const password = passwordEl.value.trim();
-
     if (!isRequired(confirmPassword)) {
         showError(confirmPasswordEl, 'Please enter the password again');
     } else if (password !== confirmPassword) {
@@ -72,29 +71,21 @@ const isPasswordSecure = (password) => {
 const isRequired = value => value === '' ? false : true;
 const isBetween = (length, min, max) => length < min || length > max ? false : true;
 const showError = (input, message) => {
-    // get the form-field element
     const formField = input.parentElement;
-    // add the error class
     formField.classList.remove('success');
     formField.classList.add('error1');
-    // show the error message
     const error1 = formField.querySelector('small');
     error1.textContent = message;
 };
 const showSuccess = (input) => {
-    // get the form-field element
     const formField = input.parentElement;
-    // remove the error class
     formField.classList.remove('error1');
     formField.classList.add('success');
-    // hide the error message
     const error1 = formField.querySelector('small');
     error1.textContent = '';
 }
 form.addEventListener('submit', function (e) {
-    // prevent the form from submitting
     e.preventDefault();
-    // validate fields
     let isUsernameValid = checkUsername(),  
         isEmailValid = checkEmail(),
         isPasswordValid = checkPassword(),
@@ -103,7 +94,6 @@ form.addEventListener('submit', function (e) {
         isEmailValid &&
         isPasswordValid &&
         isConfirmPasswordValid;
-    // submit to the server if the form is valid
     if (isFormValid) {
         const fullName = $('#fullName').val();
         const emailID = $('#emailID').val();
@@ -124,9 +114,9 @@ form.addEventListener('submit', function (e) {
                },
                success: function(response) {
                 if (response){            
-                window.location='account.cfm'     
+                     window.location='account.cfm'     
+                }
             }
-        }
         });             
     }
 });

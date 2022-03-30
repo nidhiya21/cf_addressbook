@@ -59,6 +59,6 @@
 				</div>
 			</div>
         </section>
-	<cfinclude template="footer.cfm">
+		<cfinclude template="footer.cfm">
 	</body>
 </html>
