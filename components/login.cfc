@@ -44,15 +44,16 @@
         </cfquery>
         <cfreturn local.getUsersDet />
     </cffunction>
+     <!---validate Login--->
      <cffunction name="validateLogin"  access="public"   output="false">
         <cfargument name="userName" type="string" required="true" />
         <cfargument name="password" type="string" required="true" /> 
-        <cfif  #arguments.userName# EQ  "">
-            <cfset variables.result = "Enter  your Username ">
-        </cfif>
         <cfif  #arguments.password# EQ "">
             <cfset variables.result =  "Enter your  password">
         </cfif>
-          <cfreturn variables.result>
+        <cfif  #arguments.userName# EQ  "">
+            <cfset variables.result = "Enter  your Username ">
+        </cfif>       
+        <cfreturn variables.result>
      </cffunction>  
 </cfcomponent>    
