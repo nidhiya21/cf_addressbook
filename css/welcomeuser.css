@@ -186,10 +186,9 @@ table.table .avatar {
 	color:#337ab7;
 	font-weight: 600px!important;
 	padding-top: 123px;
-    padding-left: 49px;
+    text-align: center;
 }
-.myform-btnVal{ 
-	
+.myform-btnVal{ 	
     border: 1px solid;
     color: white;
     border-radius: 18px;
@@ -222,19 +221,16 @@ table.table .avatar {
 	fill: red;
     width: 22px;
 	margin-left: -10px;
-
 }
 .svg-excel{
 	fill: green;
     width: 22px;
 	margin-right: 4px;
     margin-left: 4px;
-
 }
 .svg-print{
 	fill: black;
     width: 27px;
-
 }
 .svg-icons{
 	margin-left: 1086px!important;
@@ -250,17 +246,17 @@ table.table tr th {
 .required:after {
     content:" *";
     color: red;
-  }
- .form-group input,.form-group select {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid black;
-  color: black;
-  width: 100%;
-  font-family: "Monsterrat", sans-serif;
-  font-size: 1em;
-  padding: 8px;
-  transition: all 0.5s;
+}
+.form-group input,.form-group select {
+background: transparent;
+border: none;
+border-bottom: 1px solid black;
+color: black;
+width: 100%;
+font-family: "Monsterrat", sans-serif;
+font-size: 1em;
+padding: 8px;
+transition: all 0.5s;
 }
 form input:focus {
   background-color: rgb(22, 22, 22);
@@ -299,31 +295,31 @@ hr .label-txt{
    display: flex;
    align-items: center;
    justify-content: center;
- } 
- .view-title{
+} 
+.view-title{
 	font-size: 16px;
 	color: #337ab7;
 	font-weight: 600;
- }
- .user-img{
-	width: 23%;
+}
+.user-img{
+	width: 34%;
     height: 18%;
- }
- .modal-right{
+}
+.modal-right{
 	margin-top: -550px;
     margin-left: 989px;
     height: 521px;
 	max-width: 200px;
     background: #d9edf7;
- }
- .user-imgpopup {
+}
+.user-imgpopup {
     width: 91px;
     height: 92px;
     margin-top: 134px;
     margin-left: 38px;
     margin-right: 21px;
 }
- .btn-add-contact {
+.btn-add-contact {
 	border: 1px solid;
     color: white;
     border-radius: 18px;
@@ -347,7 +343,7 @@ hr .label-txt{
 	color:red!important;
 }
 .dltcontent{
-	width: 400px!important;
+	width: 371px!important;
 }
 .viewbody{
 	margin-right: -63px;
@@ -359,6 +355,51 @@ hr .label-txt{
 }
 .viewfooter{
 	height: 0px;
-    margin-bottom: 53px;
-    margin-top: 402px;
+    /* margin-bottom: 53px; */
+    margin-top: 434px;
+    width: 180px;
+	margin-left: 218px;
+    margin-right: -199px;
 }
+.desc{
+	margin-right: -488px!important;
+}
+.modal-right-view{
+	margin-top: 0px;
+    margin-left: 263px;
+    height: 521px;
+    max-width: 194px;
+    background: #d9edf7;
+}
+.new-register{
+    margin-top: 89px;
+}
+.user-imgpopup-view {
+    width: 72px;
+    height: 87px;
+    margin-top: 63px;
+    margin-left: 70px;
+    margin-right: 124px;
+}
+.profile-badge{
+    padding:5px;
+    position: relative;
+}
+.profile-pic{
+    position: absolute;
+    height:120px;
+    width:120px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0px;
+    z-index: 1001;
+    padding: 10px;
+}
+.profile-pic img{
+   
+    border-radius: 50%;
+    box-shadow: 0px 0px 5px 0px #c1c1c1;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+}   

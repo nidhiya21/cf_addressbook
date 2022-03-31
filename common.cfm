@@ -6,6 +6,7 @@
 <cfheader name="cache-control" value="no-cache, no-store, must-revalidate"> 
 <cfheader name="pragma" value="no-cache">
 <cfheader name="expires" value="#getHttpTimeString(now())#">
+<link rel="shortcut icon" href="./images/logoblock.png" type="image/x-icon">
 <link href="./css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 <link href="./css/all.min.css" rel="stylesheet" type="text/css"/> 
 <link href="./css/login.css" rel="stylesheet" type="text/css"/>
@@ -13,5 +14,4 @@
 <script src="./js/jquery-3.5.1.min.js"></script>
 <script src="./js/bootstrap.min.js"></script>
 <script src="./js/popper.min.js"></script>
-<script src="./js/jquery.min.js"></script>
 <script src="./js/jquery.validate.min.js"></script>
