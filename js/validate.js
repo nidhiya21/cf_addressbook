@@ -99,6 +99,7 @@ form.addEventListener('submit', function (e) {
         const emailID = $('#emailID').val();
         const userName = $('#userName').val();
         const password = $('#password').val();
+        const confirmpassword = $('#confirmpassword').val();
         $.ajax({
         type:"POST", 
         url: 'components/login.cfc', 
@@ -110,13 +111,18 @@ form.addEventListener('submit', function (e) {
                 fullName:fullName,
                 emailID:emailID,
                 userName:userName,
-                password:password
+                password:password,
+                confirmpassword:confirmpassword
                },
                success: function(response) {
+                  // alert(response); 
+                  // console.log(response);
+
                 if (response){            
                      window.location='account.cfm'     
                 }
-            }
+                
+                } 
         });             
     }
 });

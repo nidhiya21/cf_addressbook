@@ -42,12 +42,12 @@ $(document).on("click", ".modal-trigger-edit", function () {
         url: 'components/contact.cfc', 
         async: false,
         data: 
-            { 
+            {  
                 method: "getContactsByID",
                 contactID:contactID},
                 success: function(response) {
                     if (response){ 
-                        $(".modal-title").html("EDIT CONTACT");    
+                        $(".mod-title").html("EDIT CONTACT");    
                     //  console.log(typeof response);
                         var dataInJson = JSON.parse(response);
                         $(".modal-content #firstName").val(dataInJson.items[0].firstName);
@@ -67,14 +67,14 @@ $(document).on("click", ".modal-trigger-edit", function () {
                         $(".modal-content #dob").val(today);
                             if(dataInJson.items[0].attachment){
                                 var editSrc = "./contactimages/"+dataInJson.items[0].attachment;
-                                $("#edit-imgsrc").attr('src', editSrc);   
+                                $("#editimgsrc").attr('src', editSrc);   
                             }else{
                                 if(dataInJson.items[0].gender =="Male"){
                                     var editSrc = "./images/no-man.png";
-                                    $("#edit-imgsrc").attr('src', editSrc); 
+                                    $("#editimgsrc").attr('src', editSrc); 
                                 }else{
                                     var editSrc = "./images/no-female.jpg";
-                                    $("#edit-imgsrc").attr('src', editSrc); 
+                                    $("#editimgsrc").attr('src', editSrc); 
                                 } 
                             }
                     } 
@@ -102,7 +102,6 @@ $("#loginForm").validate({
          }
     }
 });
-
 $(document).on("click", ".deleteSubmit", function () {
 	var contactID = $('#contactIDVal').val();
 	$.ajax({
@@ -123,7 +122,6 @@ $(document).on("click", ".deleteSubmit", function () {
         }
     }); 
 });
-
 $(document).on("click", ".formContactSubmit", function () {
     var formData = $('#addContact').serialize();
     var attachmentVal = $('#attachment').val();
@@ -177,64 +175,26 @@ function printDiv() {
     w.print();
     w.close();
 }
-$(document).ready(function() {
-    $("#contact").validate({
-        rules: {
-             title: "required",
-             firstName: "required",
-             lastName: "required",
-             gender: "required",
-             dob: "required",
-             email: {
-                required: true,
-                email: true
-             },
-             phone: "required",
-             address: "required",
-             street: "required",
-             phoneNumber:"required"
-        },
-        messages: {
-             title: "Please select title",
-             firstName: "Please enter Firstname",
-             lastName: "Please enter Lastname",
-             gender: "Please Select Gender ",
-             dob: "Please select DOB",
-             email: {
-                email: "The email should be in the format: abc@domain.tld"
-              },
-             phone: "Please enter Phone",
-             address: "Please enter  Address",
-             street: "Please enter Street",
-             phoneNumber: "Please enter  Pincode"
-        },
-        
-    });
-});
 $("#userImgUpload").submit(function(e) {
     e.preventDefault();
 });
-$(function() {
-    $('#profile-image1').on('click', function() {
-        $('#userImg').click();
-    });
+$(document).on('hide.bs.modal','#addEmployeeModal', function () {
+    
+    $("label.fail-alert" ).remove(); 
+    $('input').removeClass('fail-alert');
+    document.getElementById("contact").reset();
+    
 });
-function previewFile(userID) {
+function preview() {
+    editimgsrc.src=URL.createObjectURL(event.target.files[0]);
+}
+function previewFile() {
     var preview = document.querySelector('img');
-    var file    = document.querySelector('input[type=file]').files[0];
-    //var reader  = new FileReader(); 
-    // reader.addEventListener("load", function () {
-    //   preview.src = reader.result;
-    // }, false);
-   // console.log(document.getElementById("userImgUpload"));
+    var file    = document.querySelector('input[type=file]').files[0]; 
     var fd = new FormData(document.getElementById("userImgUpload"));
-    console.log(fd);    
-    if (file) {
-     // console.log(file['name']);
-    var userID = userID;
-    // reader.readAsDataURL(file);   
-	$.ajax({
-  
+    console.log(fd);     
+    if (file) {  
+	$.ajax({ 
             url: "components/contact.cfc?method=updateProfile",
             type: "POST",
             data: fd,
@@ -242,7 +202,13 @@ function previewFile(userID) {
             processData: false,
             contentType: false
         }).done(function(data) {
-           $('#profile-image1').attr('src', 'userimage/' + file['name']);
+           $('.pfl-images').attr('src', 'userimage/' + file['name']);
         })  
     }
 }
+$(function() {
+    $('.pfl-images').on('click', function() {
+        $('#userImg').click();
+    });
+});
+

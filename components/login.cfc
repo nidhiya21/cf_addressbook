@@ -3,34 +3,52 @@
         <cfargument name="fullName" type="string" required="yes" >
         <cfargument name="emailID"  type="string" required="yes" >
         <cfargument name="userName" type="string" required="yes" >
-        <cfargument name="password" type="string" required="yes" >      
-        <cfquery name="Local.saveToaddressbook" result="userResult">
-            INSERT INTO addressbook
-            ( 
-            fullName,emailID,userName,password,userImage
-            )
-            VALUES 
-            ( 
-            <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fullName#" />
-            ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.emailID#" />
-            ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.userName#" />
-            ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#hash(arguments.password)#" />
-            ,<cfqueryparam cfsqltype="cf_sql_varchar" value="" />
-            )
-        </cfquery>
-        <cfset variables.getID = #userResult.generated_key#> 
-        <cfset variables.getNumberOfRecords = listLen(#userResult.generated_key#)> 
-        <cfif getNumberOfRecords GT 0>
-            <cfset Session.LoggedIn = "1">
-            <cfset Session.userName = "#arguments.userName#">
-            <cfset Session.emailID = "#arguments.emailID#">    
-            <cfset Session.userID = "#getID#">    
+        <cfargument name="password" type="string" required="yes" >  
+        <cfargument name="confirmpassword" type="string" required="yes" >  
+        <cfset variables.errorMessage= arrayNew(1) />	
+		<cfif arguments.fullName EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter FullName')>
+		</cfif>
+		<cfif arguments.emailID EQ '' OR NOT isValid("eMail", arguments.emailID)>
+			<cfset arrayAppend(errorMessage, 'Please Enter valid Email')>
+		</cfif>
+		<cfif arguments.userName EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter UserName')>
+		</cfif>
+		<cfif arguments.password EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter Password')>
+		</cfif>
+		<cfif arguments.confirmpassword EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter Confirm Password')>
+		</cfif>
+		<cfif  arguments.confirmpassword NOT EQUAL arguments.password>
+			<cfset arrayAppend(errorMessage, 'Confirm Password Mismatch')>
+		</cfif>
+		<cfif arrayIsEmpty(errorMessage)>    
+            <cfquery name="Local.saveToaddressbook" result="userResult">
+                INSERT INTO addressbook
+                ( 
+                fullName,emailID,userName,password,userImage
+                )
+                VALUES 
+                ( 
+                <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fullName#" />
+                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.emailID#" />
+                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.userName#" />
+                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#hash(arguments.password)#" />
+                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="" />
+                )
+            </cfquery>
+            <cfset variables.getID = userResult.generated_key> 
+            <cfset variables.getNumberOfRecords = listLen(userResult.generated_key)> 
+            <cfif getNumberOfRecords GT 0>
+                <cfset Session.LoggedIn = "1">
+                <cfset Session.userName = "#arguments.userName#">
+                <cfset Session.emailID = "#arguments.emailID#">    
+                <cfset Session.userID = getID>    
+            </cfif>
         </cfif>
-        <cfset retVal = ArrayNew(1)/>
-        <cfset temp = {} />
-        <cfset temp['getNumberOfRecords']=#getNumberOfRecords#/>
-        <cfset ArrayAppend(retval, temp)> 
-        <cfreturn retval> 
+		<cfreturn variables.errorMessage/>           
     </cffunction>
      <!---get user list--->
     <cffunction name="getUsers" access="public" output="false" returntype="query">	
@@ -42,16 +60,20 @@
             WHERE (userName = '#arguments.userName#' or emailID='#arguments.userName#' ) 
             AND password = '#hash(arguments.password)#'
         </cfquery>
+        <cfset Session.LoggedIn = "1">
+        <cfset Session.userName = getUsersDet.userName>
+        <cfset Session.emailID = getUsersDet.emailID>  
+        <cfset Session.userID = getUsersDet.userID>    
         <cfreturn local.getUsersDet />
     </cffunction>
      <!---validate Login--->
      <cffunction name="validateLogin"  access="public"   output="false">
         <cfargument name="userName" type="string" required="true" />
         <cfargument name="password" type="string" required="true" /> 
-        <cfif  #arguments.password# EQ "">
+        <cfif  arguments.password EQ "">
             <cfset variables.result =  "Enter your  password">
         </cfif>
-        <cfif  #arguments.userName# EQ  "">
+        <cfif  arguments.userName EQ  "">
             <cfset variables.result = "Enter  your Username ">
         </cfif>       
         <cfreturn variables.result>
