@@ -36,6 +36,10 @@ $(document).on("click", ".modal-trigger", function () {
 	var contactID = $(this).data('id');
 	$(".modal-contentVal #contactIDVal").val(contactID);   
 });
+
+$(document).on("click", ".myform-btnVal", function () {
+    $(".mod-title").html("ADD CONTACT");    
+});   
 $(document).on("click", ".modal-trigger-edit", function () {
 	var contactID = $(this).data('id');
     $.ajax({
@@ -60,23 +64,24 @@ $(document).on("click", ".modal-trigger-edit", function () {
                         $(".modal-content #email").val(dataInJson.items[0].email);
                         $(".modal-content #phoneNumber").val(dataInJson.items[0].phoneNumber);
                         $(".modal-content #contactID").val(dataInJson.items[0].contactID);
+                        $(".modal-content #old_img").val(dataInJson.items[0].attachment);
                         var now = new Date(dataInJson.items[0].dob);
                         var day = ("0" + now.getDate()).slice(-2);
                         var month = ("0" + (now.getMonth() + 1)).slice(-2);
                         var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
                         $(".modal-content #dob").val(today);
-                            if(dataInJson.items[0].attachment){
-                                var editSrc = "./contactimages/"+dataInJson.items[0].attachment;
-                                $("#editimgsrc").attr('src', editSrc);   
+                        if(dataInJson.items[0].attachment){
+                            var editSrc = "./contactimages/"+dataInJson.items[0].attachment;
+                            $("#editimgsrc").attr('src', editSrc);   
+                        }else{
+                            if(dataInJson.items[0].gender =="Male"){
+                                var editSrc = "./images/no-man.png";
+                                $("#editimgsrc").attr('src', editSrc); 
                             }else{
-                                if(dataInJson.items[0].gender =="Male"){
-                                    var editSrc = "./images/no-man.png";
-                                    $("#editimgsrc").attr('src', editSrc); 
-                                }else{
-                                    var editSrc = "./images/no-female.jpg";
-                                    $("#editimgsrc").attr('src', editSrc); 
-                                } 
-                            }
+                                var editSrc = "./images/no-female.jpg";
+                                $("#editimgsrc").attr('src', editSrc); 
+                            } 
+                        }
                     } 
                     else {                  
                         alert('Error!');    
@@ -124,7 +129,13 @@ $(document).on("click", ".deleteSubmit", function () {
 });
 $(document).on("click", ".formContactSubmit", function () {
     var formData = $('#addContact').serialize();
-    var attachmentVal = $('#attachment').val();
+    if ($('#attachment').val()!='') {
+        var attachmentVal = $('#attachment').val();
+    } else if ($('#old_img').val()!='') {
+    var attachmentVal = $('#old_img').val(); 
+    } else {
+    var attachmentVal = '';
+    }
     var attachment = attachmentVal.split("\\").pop();
     var userID = $('#userID').val();
     var title = $('#title').val();
@@ -160,12 +171,10 @@ $(document).on("click", ".formContactSubmit", function () {
             contactID: contactID
         },
         success: function(objResponse) { 
-            if (objResponse){ 
-                alert('Contact Updated successfully');           
-            } 
-            else {       
-                alert('Error!');  
-            }                    
+         //   console.log(typeof objResponse);
+            if (!$.trim(objResponse)){   
+                alert('Contact Updated successfully');    
+            }                   
         }
     }); 
 });
@@ -211,4 +220,5 @@ $(function() {
         $('#userImg').click();
     });
 });
+
 

@@ -25,7 +25,7 @@
 			<cfset arrayAppend(errorMessage, 'Confirm Password Mismatch')>
 		</cfif>
 		<cfif arrayIsEmpty(errorMessage)>    
-            <cfquery name="Local.saveToaddressbook" result="userResult">
+            <cfquery name="saveToaddressbook" result="userResult">
                 INSERT INTO addressbook
                 ( 
                 fullName,emailID,userName,password,userImage
@@ -48,13 +48,12 @@
                 <cfset Session.userID = getID>    
             </cfif>
         </cfif>
-		<cfreturn variables.errorMessage/>           
+		<cfreturn variables.errorMessage/>            
     </cffunction>
-     <!---get user list--->
-    <cffunction name="getUsers" access="public" output="false" returntype="query">	
+    <cffunction name="getUsers" access="public" hint="get user list" output="false" returntype="query">	
         <cfargument name="userName" type="string" required="true" />
         <cfargument name="password" type="string" required="true" /> 
-        <cfquery name="local.getUsersDet">
+        <cfquery name="getUsersDet">
             SELECT *
             FROM addressbook
             WHERE (userName = '#arguments.userName#' or emailID='#arguments.userName#' ) 
@@ -64,10 +63,9 @@
         <cfset Session.userName = getUsersDet.userName>
         <cfset Session.emailID = getUsersDet.emailID>  
         <cfset Session.userID = getUsersDet.userID>    
-        <cfreturn local.getUsersDet />
+        <cfreturn getUsersDet />
     </cffunction>
-     <!---validate Login--->
-     <cffunction name="validateLogin"  access="public"   output="false">
+    <cffunction name="validateLogin"  access="public"  hint="validate Login" output="false">
         <cfargument name="userName" type="string" required="true" />
         <cfargument name="password" type="string" required="true" /> 
         <cfif  arguments.password EQ "">
@@ -77,5 +75,5 @@
             <cfset variables.result = "Enter  your Username ">
         </cfif>       
         <cfreturn variables.result>
-     </cffunction>  
+    </cffunction>  
 </cfcomponent>    

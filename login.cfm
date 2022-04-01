@@ -8,7 +8,7 @@
 		<script src="./js/account.js"></script> 
 	</head> 
 	<body>	
-		<cfif structKeyExists(form,'login')>
+		cfif structKeyExists(form,'login')>
 			<cfif form.userName EQ '' or  form.password EQ ''>
 				<cfinvoke component="components.login" method="validateLogin" returnvariable="validationRes">
 					<cfinvokeargument name="userName"  value = "#form.userName#" />

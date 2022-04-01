@@ -44,12 +44,12 @@
                                     <div class="form-group form-field">
 										<input type="email"  id="emailID" name="emailID"   placeholder="Email ID">
 										<label>Email ID</label>
-										<small class="err"></small>
+										<small class="err usrvalid"></small>
 									</div>
                                     <div class="form-group form-field">
 										<input type="text"  id="userName" name="userName"  placeholder="Username"> 
 										<label>Username</label>
-										<small class="err"></small>
+										<small class="err usrvalid"></small>
 									</div>
 									<div class="form-group form-field">
 										<input type="password" id="password" name="password"  placeholder="Password">

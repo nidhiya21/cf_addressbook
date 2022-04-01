@@ -302,8 +302,8 @@ hr .label-txt{
 	font-weight: 600;
 }
 .user-img{
-	width: 34%;
-    height: 18%;
+	width: 45%;
+    height: 24%;
 }
 .modal-right{
 	margin-top: -550px;
@@ -384,6 +384,23 @@ hr .label-txt{
 .profile-badge{
     padding:5px;
     position: relative;
+}
+.svg-icons{
+    margin-top: -22px!important;
+}
+.txt-title{
+    padding-top: 17px;
+}
+.contact-list-cnt{
+    background: #337ab7;
+    color: white;
+    font-family: "Monsterrat", sans-serif;
+    font-size: 16px;
+    font-weight: 600px!important;
+    width: 318px;
+    height: 35px;
+    text-align: center;
+    padding-top: 5px;
 }
 .profile-pic{
     position: absolute;
