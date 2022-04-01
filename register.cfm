@@ -8,6 +8,15 @@
 	</head> 
 	<body>
 		<cfinclude template="header.cfm">
+		<cfif structKeyExists(form,'saveForm')>
+			<cfinvoke component="components.contact" method="searchUser" returnvariable="result">
+				<cfinvokeargument name="emailID"  value = "#form.emailID#" />
+				<cfinvokeargument name="userName"  value = "#form.userName#" />
+			</cfinvoke>
+			<cfif result GT 0>
+				<cfset variables.errors = "Email ID alredy existing!">			
+			</cfif>
+		</cfif>
 		<section class="myform-area">
 			<div class="container">
 				<div class="row justify-content-center">
@@ -22,7 +31,10 @@
                                 <cfparam name="form.emailID" default=""> 
                                 <cfparam name="form.userName" default=""> 
                                 <cfparam name="form.password" default=""> 
-                                <cfparam name="form.confirmpassword" default="">                               
+                                <cfparam name="form.confirmpassword" default=""> 
+								<cfif isDefined("errors")>
+									<div class="error"><cfoutput>#variables.errors#</cfoutput></div>
+								</cfif>                               
                                 <form name="signup" method="post" id="signup">
 									<div class="form-group form-field">
 										<input type="text"  id="fullName" name="fullName" placeholder="Full Name">
@@ -32,12 +44,12 @@
                                     <div class="form-group form-field">
 										<input type="email"  id="emailID" name="emailID"   placeholder="Email ID">
 										<label>Email ID</label>
-										<small class="err"></small>
+										<small class="err usrvalid"></small>
 									</div>
                                     <div class="form-group form-field">
 										<input type="text"  id="userName" name="userName"  placeholder="Username"> 
 										<label>Username</label>
-										<small class="err"></small>
+										<small class="err usrvalid"></small>
 									</div>
 									<div class="form-group form-field">
 										<input type="password" id="password" name="password"  placeholder="Password">
@@ -59,6 +71,6 @@
 				</div>
 			</div>
         </section>
-	<cfinclude template="footer.cfm">
+		<cfinclude template="footer.cfm">
 	</body>
 </html>

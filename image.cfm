@@ -1,45 +1,102 @@
+
 <html>
-
-<script>
-function startUpload(){//onsubmit hide the form and show the upload process animation pic
-      document.getElementById('upload_process').style.visibility = 'visible';
-      document.getElementById('wrapper').style.visibility = 'hidden';
-      return true;
-}
-
-function stopUpload(success){
-      var result = '';
-      if (success == "true"){
-         result = '<div class="msg">THE FILE WAS UPLOADED SUCCCESSFULLY!<\/div>';
-      }
-      else {
-         result = '<div class="emsg">YOU HAVE EXPERIENCED AN ERROR!<\/div>';
-      }
-      document.getElementById('upload_process').style.visibility = 'hidden';
-      document.getElementById('wrapper').innerHTML = result;
-      document.getElementById('wrapper').style.visibility = 'visible';
-	 return true;   
-}
-</script>
-
+<head>
+      <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+      <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <!-- <link rel="stylesheet" type="text/css" href="profile.css"> -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+             <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <!-- <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"> -->
+  <!-- <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
+<!-- <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
+</head>
 <body>
 
-<form name="uploadForm" method="post" enctype="multipart/form-data" action="imageact.cfm" target="upload_target" onsubmit="startUpload();"/>
+    <style type="text/css">
+        .profile-badge{
+    border:1px solid #c1c1c1;
+    padding:5px;
+    position: relative;
+}
+.profile-pic{
+    position: absolute;
+    height:120px;
+    width:120px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0px;
+    z-index: 1001;
+    padding: 10px;
+}
+.profile-pic img{
+   
+    border-radius: 50%;
+    box-shadow: 0px 0px 5px 0px #c1c1c1;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+}   
 
-<p id="upload_process">Uploading File...<br/><br /><br /><img src="ajax_load.gif" /><br/></p>
-<!-- go get yourself an animated gif -->
-<div id="wrapper">
+ 
+</style>
+<script>
+function previewFile() {
+  var preview = document.querySelector('img');
+  var file    = document.querySelector('input[type=file]').files[0];
+  var reader  = new FileReader();
 
-<input class="selectedFile" name="selectedFile" id="selectedFile" type="file" /><br>
-<input name="uploadFile" type="submit" id="uploadFile" class="uploadFile" value="Upload File"/>
+  reader.addEventListener("load", function () {
+    preview.src = reader.result;
+  }, false);
 
-</div>
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+    var fd = new FormData(document.getElementById("userImgUpload"));
+    console.log(fd);     
+    if (file) {
+     // console.log(file['name']);
+    // reader.readAsDataURL(file);   
+	$.ajax({
+  
+            url: "components/contact.cfc?method=updateProfile",
+            type: "POST",
+            data: fd,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false
+        }).done(function(data) {
+           $('#profile-image1').attr('src', 'userimage/' + file['name']);
+        })  
+    }
 
-<iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid ##fff;"></iframe>
+}
+                      $(function() {
+            $('#profile-image1').on('click', function() {
+                $('#userImg').click();
+            });
+        });
+		</script>
 
-</form>
-
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 col-sm-6 col-xs-12 profile-badge">
+                <!-- <img src="https://dummyimage.com/600x400/000/"> -->
+                	<form  method="post" name="userImgUpload" id="userImgUpload">
+                <div class="profile-pic">
+                 
+                        <img alt="User Pic" src="https://d30y9cdsu7xlg0.cloudfront.net/png/138926-200.png" id="profile-image1" height="200">
+                        <input id="userImg" class="hidden"  name="userImg"  type="file" onchange="previewFile()" >
+                        <div style="color:#999;" >  </div>
+                        
+                </div>
+				</form>
+                                                         
+ </div>
+ 
+ </div></div></div>
+                   
+    
 </body>
-
 </html>
-

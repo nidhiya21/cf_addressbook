@@ -294,3 +294,10 @@ a,a:hover{
 .err {
     color: red;
 }
+.nav-links-usr{
+    color: white!important;
+    text-transform: capitalize;
+}
+.smily{
+    font-size:19px;
+}    

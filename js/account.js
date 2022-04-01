@@ -29,27 +29,29 @@ $(document).ready(function() {
              address: "Please enter  Address",
              street: "Please enter Street",
              pincode: "Please enter  Pincode"
-        },
-        
+        },       
     });
 });
 $(document).on("click", ".modal-trigger", function () {
 	var contactID = $(this).data('id');
-	$(".modal-contentVal #contactIDVal").val(contactID);
-    
+	$(".modal-contentVal #contactIDVal").val(contactID);   
 });
+
+$(document).on("click", ".myform-btnVal", function () {
+    $(".mod-title").html("ADD CONTACT");    
+});   
 $(document).on("click", ".modal-trigger-edit", function () {
 	var contactID = $(this).data('id');
     $.ajax({
         url: 'components/contact.cfc', 
         async: false,
         data: 
-            { 
+            {  
                 method: "getContactsByID",
                 contactID:contactID},
                 success: function(response) {
                     if (response){ 
-                        $(".modal-title").html("EDIT CONTACT");    
+                        $(".mod-title").html("EDIT CONTACT");    
                     //  console.log(typeof response);
                         var dataInJson = JSON.parse(response);
                         $(".modal-content #firstName").val(dataInJson.items[0].firstName);
@@ -62,23 +64,24 @@ $(document).on("click", ".modal-trigger-edit", function () {
                         $(".modal-content #email").val(dataInJson.items[0].email);
                         $(".modal-content #phoneNumber").val(dataInJson.items[0].phoneNumber);
                         $(".modal-content #contactID").val(dataInJson.items[0].contactID);
+                        $(".modal-content #old_img").val(dataInJson.items[0].attachment);
                         var now = new Date(dataInJson.items[0].dob);
                         var day = ("0" + now.getDate()).slice(-2);
                         var month = ("0" + (now.getMonth() + 1)).slice(-2);
                         var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
                         $(".modal-content #dob").val(today);
-                            if(dataInJson.items[0].attachment){
-                                var editSrc = "./contactimages/"+dataInJson.items[0].attachment;
-                                $("#edit-imgsrc").attr('src', editSrc);   
+                        if(dataInJson.items[0].attachment){
+                            var editSrc = "./contactimages/"+dataInJson.items[0].attachment;
+                            $("#editimgsrc").attr('src', editSrc);   
+                        }else{
+                            if(dataInJson.items[0].gender =="Male"){
+                                var editSrc = "./images/no-man.png";
+                                $("#editimgsrc").attr('src', editSrc); 
                             }else{
-                                if(dataInJson.items[0].gender =="Male"){
-                                    var editSrc = "./images/no-man.png";
-                                    $("#edit-imgsrc").attr('src', editSrc); 
-                                }else{
-                                    var editSrc = "./images/no-female.jpg";
-                                    $("#edit-imgsrc").attr('src', editSrc); 
-                                } 
-                            }
+                                var editSrc = "./images/no-female.jpg";
+                                $("#editimgsrc").attr('src', editSrc); 
+                            } 
+                        }
                     } 
                     else {                  
                         alert('Error!');    
@@ -104,7 +107,6 @@ $("#loginForm").validate({
          }
     }
 });
-
 $(document).on("click", ".deleteSubmit", function () {
 	var contactID = $('#contactIDVal').val();
 	$.ajax({
@@ -125,10 +127,15 @@ $(document).on("click", ".deleteSubmit", function () {
         }
     }); 
 });
-
 $(document).on("click", ".formContactSubmit", function () {
     var formData = $('#addContact').serialize();
-    var attachmentVal = $('#attachment').val();
+    if ($('#attachment').val()!='') {
+        var attachmentVal = $('#attachment').val();
+    } else if ($('#old_img').val()!='') {
+    var attachmentVal = $('#old_img').val(); 
+    } else {
+    var attachmentVal = '';
+    }
     var attachment = attachmentVal.split("\\").pop();
     var userID = $('#userID').val();
     var title = $('#title').val();
@@ -164,12 +171,10 @@ $(document).on("click", ".formContactSubmit", function () {
             contactID: contactID
         },
         success: function(objResponse) { 
-            if (objResponse){ 
-                alert('Contact Updated successfully');           
-            } 
-            else {       
-                alert('Error!');  
-            }                    
+         //   console.log(typeof objResponse);
+            if (!$.trim(objResponse)){   
+                alert('Contact Updated successfully');    
+            }                   
         }
     }); 
 });
@@ -179,75 +184,41 @@ function printDiv() {
     w.print();
     w.close();
 }
-$(document).ready(function() {
-    $("#contact").validate({
-        rules: {
-             title: "required",
-             firstName: "required",
-             lastName: "required",
-             gender: "required",
-             dob: "required",
-             email: {
-                required: true,
-                email: true
-             },
-             phone: "required",
-             address: "required",
-             street: "required",
-             phoneNumber:"required"
-        },
-        messages: {
-             title: "Please select title",
-             firstName: "Please enter Firstname",
-             lastName: "Please enter Lastname",
-             gender: "Please Select Gender ",
-             dob: "Please select DOB",
-             email: {
-                email: "The email should be in the format: abc@domain.tld"
-              },
-             phone: "Please enter Phone",
-             address: "Please enter  Address",
-             street: "Please enter Street",
-             phoneNumber: "Please enter  Pincode"
-        },
-        
+$("#userImgUpload").submit(function(e) {
+    e.preventDefault();
+});
+$(document).on('hide.bs.modal','#addEmployeeModal', function () {
+    
+    $("label.fail-alert" ).remove(); 
+    $('input').removeClass('fail-alert');
+    document.getElementById("contact").reset();
+    
+});
+function preview() {
+    editimgsrc.src=URL.createObjectURL(event.target.files[0]);
+}
+function previewFile() {
+    var preview = document.querySelector('img');
+    var file    = document.querySelector('input[type=file]').files[0]; 
+    var fd = new FormData(document.getElementById("userImgUpload"));
+    console.log(fd);     
+    if (file) {  
+	$.ajax({ 
+            url: "components/contact.cfc?method=updateProfile",
+            type: "POST",
+            data: fd,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false
+        }).done(function(data) {
+           $('.pfl-images').attr('src', 'userimage/' + file['name']);
+        })  
+    }
+}
+$(function() {
+    $('.pfl-images').on('click', function() {
+        $('#userImg').click();
     });
 });
 
 
-function previewFile(userID) {
-    var preview = document.querySelector('img');
-    var file    = document.querySelector('input[type=file]').files[0];
-    var reader  = new FileReader(); 
-    reader.addEventListener("load", function () {
-      preview.src = reader.result;
-    }, false);
-  
-    if (file) {
-     // console.log(file['name']);
-    var userID = userID;
-    var userImg = file['name'];
-    reader.readAsDataURL(file);
-	$.ajax({
-        type:"POST",   
-        url: 'components/contact.cfc', 
-        async: false,
-        dataType: "json",  
-        enctype: 'multipart/form-data',
-        data: {
-                method: "updateProfile",
-                userID: userID,
-                userImg: userImg   
-            },
-            success: function(objResponse ) { 
-                             
-            }
-        }); 
-  
-    }
-   }
-    $(function() {
-        $('#profile-image1').on('click', function() {
-          $('#userImg').click();
-        });
-    });

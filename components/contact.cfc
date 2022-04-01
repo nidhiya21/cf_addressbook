@@ -1,4 +1,4 @@
- <cfcomponent >
+ <cfcomponent>
     <cffunction name = "uploadfile" returnType = "any"  access = "public">
         <cfset variables.validMimeTypes =  {
                                         'image/jpeg': {extension: 'jpg'}
@@ -12,64 +12,65 @@
                 nameconflict="makeunique">
             <cfcatch type="any">
                 <cfif FindNoCase( "No data was received in the uploaded" , cfcatch.message )>
-                        <cfabort showerror="Zero length file">
+                    <cfabort showerror="Zero length file">
                 <cfelseif FindNoCase( "The MIME type or the Extension of the uploaded file", cfcatch.message )>
-                        <cfabort showerror="Invalid file type">
+                    <cfabort showerror="Invalid file type">
                 <cfelseif FindNoCase( "did not contain a file." , cfcatch.message )>
-                        <cfabort showerror="Empty form field">
+                    <cfabort showerror="Empty form field">
                 <cfelse>
-                        <cfabort showerror="Unhandled File Upload Error">
+                    <cfabort showerror="Unhandled File Upload Error">
                 </cfif>
             </cfcatch>
         </cftry>
         <cfreturn uploadResult>
     </cffunction> 
-     <!---validate contact --->
-     <cffunction name="validateContact"  access="public"   output="false">
-        <cfargument name="title" type="string" required="true" />
-        <cfargument name="firstName" type="string" required="true" /> 
-        <cfargument name="lastName" type="string">
-        <cfargument name="gender" type="string">
-        <cfargument name="dob" type="string">
-        <cfargument name="address" type="string">
-        <cfargument name="street" type="string">
-        <cfargument name="email" type="string">
-        <cfargument name="phoneNumber" type="string">
-        <cfargument name="pincode" ype="numeric">
-        <cfif  #arguments.title# EQ  "">
+     <cffunction name="validateContact" hint="validate contact" access="public"   output="false">
+        <cfset  variables.title =form.title />
+        <cfset  variables.firstName =form.firstName  /> 
+        <cfset  variables.lastName  =form.lastName />
+        <cfset  variables.gender =form.gender />
+        <cfset  variables.dob =form.dob />
+        <cfset  variables.address=form.address >
+        <cfset  variables.street =form.street >
+        <cfset  variables.email =form.email >
+        <cfset  variables.phoneNumber =form.phoneNumber >
+        <cfset  variables.pincode  =form.pincode>
+        <cfset  variables.attachment  =form.attachment>
+        <cfif  variables.title EQ  "">
             <cfset variables.result = "Please select title ">
         </cfif>
-        <cfif  #arguments.firstName# EQ "">
+        <cfif  variables.firstName EQ "">
             <cfset variables.result =  "Enter your  firstName">
         </cfif>
-        <cfif  #arguments.lastName# EQ "">
+        <cfif  variables.lastName EQ "">
             <cfset variables.result =  "Enter your  lastName">
         </cfif>
-        <cfif  #arguments.gender# EQ "">
+        <cfif  variables.gender EQ "">
             <cfset variables.result =  "Enter your  gender">
         </cfif>
-        <cfif  #arguments.dob# EQ "">
+        <cfif  variables.dob EQ "">
             <cfset variables.result =  "Enter your  dob">
         </cfif>
-        <cfif  #arguments.address# EQ "">
+        <cfif  variables.address EQ "">
             <cfset variables.result =  "Enter your  address">
         </cfif>
-        <cfif  #arguments.street# EQ "">
+        <cfif  variables.street EQ "">
             <cfset variables.result =  "Enter your  street">
         </cfif>
-        <cfif  #arguments.email# EQ "">
+        <cfif  variables.email EQ "">
             <cfset variables.result =  "Enter your  email">
         </cfif>
-        <cfif  #arguments.phoneNumber# EQ "">
+        <cfif  variables.phoneNumber EQ "">
             <cfset variables.result =  "Enter your  phoneNumber">
         </cfif>
-        <cfif  #arguments.pincode# EQ "">
+        <cfif  variables.pincode EQ "">
             <cfset variables.result =  "Enter your  pincode">
         </cfif>
-        <cfreturn variables.result>
+        <cfif  variables.result NEQ "">
+            <cfreturn variables.result>
+         </cfif>
      </cffunction> 
-    <!---add new pcontactge --->
-    <cffunction name="insertContact" access="remote"  output="false"  returntype="any" returnformat="JSON">
+    <cffunction name="insertContact" access="remote"  hint="add new contact page"  output="false"  returntype="any" returnformat="JSON">
         <cfargument name="userID" ype="numeric">
         <cfargument name="title" type="string">
         <cfargument name="firstName" type="string">
@@ -83,168 +84,241 @@
         <cfargument name="phoneNumber" type="string">
         <cfargument name="pincode" ype="numeric">
         <cfargument name="contactID" ype="numeric">
-        <cfif #arguments.contactID# NEQ ''>
-            <cfquery name = "updateContact"  result="res">
-                update contacts
-                set    userID= <cfqueryparam value = "#arguments.userID#" cfsqltype = "cf_sql_varchar">,
-                title= <cfqueryparam value = "#arguments.title#" cfsqltype = "cf_sql_varchar">,
-                firstName=    <cfqueryparam value = "#arguments.firstName#" cfsqltype ="cf_sql_varchar">,
-                lastName= <cfqueryparam value = "#arguments.lastName#" cfsqltype = "cf_sql_varchar">,
-                gender=<cfqueryparam value = "#arguments.gender#" cfsqltype = "cf_sql_varchar"/>,
-                dob= <cfqueryparam value = "#arguments.dob#" cfsqltype = "cf_sql_date"/>,
-                attachment=<cfqueryparam value ="#arguments.attachment#" cfsqltype = "cf_sql_varchar"/>,
-                address=<cfqueryparam value = "#arguments.address#" cfsqltype = "cf_sql_varchar">,
-                street=<cfqueryparam value ="#arguments.street#" cfsqltype = "cf_sql_varchar"/>,
-                email=<cfqueryparam value = "#arguments.email#" cfsqltype = "cf_sql_varchar">,
-                phoneNumber=<cfqueryparam value = "#arguments.phoneNumber#" cfsqltype = "cf_sql_varchar"/>,
-                pincode=<cfqueryparam value = "#arguments.pincode#" cfsqltype = "cf_sql_integer"/>
-                where contactID= <cfqueryparam value = "#arguments.contactID#" cfsqltype = "cf_sql_integer" >
-            </cfquery>
-            <cfif IsDefined("updateContact.RecordCount")>
-                <cfset Response = true />       
-            </cfif>         
-        <cfelse>
-            <cfquery name = "local.insertContactDetails" result="res">  
-                insert into contacts(userID,title,firstName,lastName,gender,dob,attachment,address,street,email,phoneNumber,pincode)
-                values(
-                <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.userID#" />
-                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.title#" />
-                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.firstName#" />
-                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.lastName#" />
-                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.gender#" />
-                ,<cfqueryparam cfsqltype="cf_sql_date" value="#arguments.dob#" />
-                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.attachment#" />
-                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.address#" />
-                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.street#" />
-                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.email#" />
-                ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.phoneNumber#"/>
-                ,<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.pincode#"/>
-                )
-            </cfquery>
-             <cfset variables.getNumberOfRecords = listLen(res.RecordCount)>             
+        <cfset variables.errorMessage= arrayNew(1) />
+        <cfif arguments.title EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter Title')>
+		</cfif>		
+		<cfif arguments.firstName EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter FirstName')>
+		</cfif>
+		<cfif arguments.lastName EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter LastName')>
+		</cfif>
+		<cfif arguments.gender EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter Gender')>
+		</cfif>
+		<cfif arguments.dob EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter Date of Birth')>
+		</cfif>
+		<cfif arguments.address EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter Address')>
+		</cfif>
+		<cfif arguments.street EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter Street')>
+		</cfif>
+        <cfif arguments.email EQ '' OR NOT isValid("eMail", arguments.email)>
+			<cfset arrayAppend(errorMessage, 'Please Enter valid Email')>
+		</cfif>	
+		<cfif arguments.phoneNumber EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter Phone')>
+		</cfif>
+        <cfif arguments.pincode EQ ''>
+			<cfset arrayAppend(errorMessage, 'Please Enter Pin')>
+		</cfif>
+		<cfif arrayIsEmpty(errorMessage)>	
+            <cfif arguments.contactID NEQ ''>
+                <cfquery name = "updateContact"  result="res">
+                    update contacts
+                    set    userID= <cfqueryparam value = "#arguments.userID#" cfsqltype = "cf_sql_varchar">,
+                    title= <cfqueryparam value = "#arguments.title#" cfsqltype = "cf_sql_varchar">,
+                    firstName=    <cfqueryparam value = "#arguments.firstName#" cfsqltype ="cf_sql_varchar">,
+                    lastName= <cfqueryparam value = "#arguments.lastName#" cfsqltype = "cf_sql_varchar">,
+                    gender=<cfqueryparam value = "#arguments.gender#" cfsqltype = "cf_sql_varchar"/>,
+                    dob= <cfqueryparam value = "#arguments.dob#" cfsqltype = "cf_sql_date"/>,
+                    attachment=<cfqueryparam value ="#arguments.attachment#" cfsqltype = "cf_sql_varchar"/>,
+                    address=<cfqueryparam value = "#arguments.address#" cfsqltype = "cf_sql_varchar">,
+                    street=<cfqueryparam value ="#arguments.street#" cfsqltype = "cf_sql_varchar"/>,
+                    email=<cfqueryparam value = "#arguments.email#" cfsqltype = "cf_sql_varchar">,
+                    phoneNumber=<cfqueryparam value = "#arguments.phoneNumber#" cfsqltype = "cf_sql_varchar"/>,
+                    pincode=<cfqueryparam value = "#arguments.pincode#" cfsqltype = "cf_sql_integer"/>
+                    where contactID= <cfqueryparam value = "#arguments.contactID#" cfsqltype = "cf_sql_integer"/>
+                </cfquery>
+                	  
+            <cfelse>
+                <cfquery name = "insertContactDetails" result="res">  
+                    insert into contacts(userID,title,firstName,lastName,gender,dob,attachment,address,street,email,phoneNumber,pincode)
+                    values(
+                    <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.userID#" />
+                    ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.title#" />
+                    ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.firstName#" />
+                    ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.lastName#" />
+                    ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.gender#" />
+                    ,<cfqueryparam cfsqltype="cf_sql_date" value="#arguments.dob#" />
+                    ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.attachment#" />
+                    ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.address#" />
+                    ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.street#" />
+                    ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.email#" />
+                    ,<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.phoneNumber#"/>
+                    ,<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.pincode#"/>
+                    )
+                </cfquery> 
+                
+            </cfif> 
         </cfif> 
-             <cfset Response = true />     
-            <cfreturn Response>
+            <cfreturn variables.errorMessage />	
     </cffunction> 
-    <!---get contacts --->
-    <cffunction name="getContacts" access="public" output="false" >	 
+    <cffunction name="getContacts" hint="get contacts"  access="public" output="false" >	 
     <cfargument name="userID" type="numeric" required="yes" >
-        <cfquery name = "local.contactList"> 
+        <cfquery name = "contactList"> 
             SELECT *
             FROM contacts
             where userID=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.userID#"   >
         </cfquery>
-        <cfreturn local.contactList/>  
-    </cffunction>   
-    <!---get contacts ORM --->
-    <cffunction name="getContactsList" access="public" output="false" returnType="any">	 
-    <cfargument name="userID" type="numeric" required="yes" > 
-       <cfset variables.contactArr = ORMExecuteQuery("from contacts where userID=#arguments.userID#")> 
-
-        <cfreturn variables.contactArr/>  
+        <cfreturn variables.contactList/>  
     </cffunction>  
-    <!---delete contacts --->
-    <cffunction name="deleteContact" access="remote" returntype="struct" returnformat="json"  output="false">
+    <cffunction name="getContactsCnt" hint="get contacts count"  access="public" output="false" >	 
+    <cfargument name="userID" type="numeric" required="yes" >
+        <cfquery name = "contactList"> 
+            SELECT count(*) as count
+            FROM contacts
+            where userID=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.userID#"   >
+        </cfquery>
+        <cfreturn variables.contactList/>  
+    </cffunction> 
+    <cffunction name="getContactsList" hint="get contacts ORM" access="public" output="false" returnType="any">	 
+    <cfargument name="userID" type="numeric" required="yes" > 
+       <cfset variables.contactArr = ORMExecuteQuery("from contacts where userID=#arguments.userID# ORDER BY contactID DESC")> 
+       <cfreturn variables.contactArr/>  
+    </cffunction>  
+    <cffunction name="deleteContact" access="remote" returntype="struct" hint="delete contacts" returnformat="json"  output="false">
         <cfargument name="contactID" type="any" required="true">		     
-            <cfquery name="local.deleteuserDet" result="deleteResult">
+            <cfquery name="deleteuserDet" result="deleteResult">
                 delete from contacts  where contactID=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.contactID#">
             </cfquery>
             <cfset variables.cfcResults = deleteResult.recordcount>
             <cfif  variables.cfcResults NEQ 0>
-                <cfset LOCAL.Response.Success = true />   
+                <cfset variables.Response.Success = true />   
             <cfelse> 
-                <cfset LOCAL.Response.Success = false />            
+                <cfset variables.Response.Success = false />            
             </cfif>
-                <cfreturn LOCAL.Response>
+                <cfreturn variables.Response>
     </cffunction>  
-    <!---get contacts by id--->
-    <cffunction name="getContactsByID" access="remote"  output="false"  returntype="any" returnformat="JSON" >   	 
+    <cffunction name="getContactsByID" access="remote"  output="false" hint="get contacts by id" returntype="any" returnformat="JSON" >   	 
         <cfargument name="contactID" type="numeric" required="yes" > 
-            <cfset retVal = ArrayNew(1)>
-            <cfquery name = "contactDetails"> 
+            <cfset variables.retVal = ArrayNew(1)>
+            <cfquery name = "contactDetails">  
                 SELECT *
                 FROM contacts
                 where contactID=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.contactID#">
             </cfquery>
-             <cfloop query="contactDetails">
-                <cfset temp = {} />
-                <cfset temp['title']=contactDetails.title />
-                <cfset temp['firstName']=contactDetails.firstName />
-                <cfset temp['lastName']=contactDetails.lastName />
-                <cfset temp['gender']=contactDetails.gender />
-                <cfset temp['contactID']=contactDetails.contactID />
-                <cfset temp['address']=contactDetails.address />
-                <cfset temp['street']=contactDetails.street />
-                <cfset temp['pincode']=contactDetails.pincode />
-                <cfset temp['phoneNumber']=contactDetails.phoneNumber />
-                <cfset temp['email']=contactDetails.email />
-                <cfset temp['attachment']=contactDetails.attachment />
-                <cfset temp['dob']=contactDetails.dob />
+            <cfloop query="contactDetails"> 
+                <cfset variables.temp = {} />
+                <cfset variables.temp['title']=contactDetails.title />
+                <cfset variables.temp['firstName']=contactDetails.firstName />
+                <cfset variables.temp['lastName']=contactDetails.lastName />
+                <cfset variables.temp['gender']=contactDetails.gender />
+                <cfset variables.temp['contactID']=contactDetails.contactID />
+                <cfset variables.temp['address']=contactDetails.address />
+                <cfset variables.temp['street']=contactDetails.street />
+                <cfset variables.temp['pincode']=contactDetails.pincode />
+                <cfset variables.temp['phoneNumber']=contactDetails.phoneNumber />
+                <cfset variables.temp['email']=contactDetails.email />
+                <cfset variables.temp['attachment']=contactDetails.attachment />
+                <cfset variables.temp['dob']=contactDetails.dob />
                 <cfset ArrayAppend(retval, temp)>
             </cfloop>
-                <cfset result = {} />
-                <cfset result['items'] = retVal />
-                <cfreturn result> 
+            <cfset variables.result = {} />
+            <cfset variables.result['items'] = retVal />
+        <cfreturn variables.result> 
     </cffunction>  
-    <!---get excel--->
-    <cffunction name="getExcel" access="remote"  output="false"  >   	 
+    <cffunction name="getExcel" access="remote" hint="get excel" output="false"  >   	 
         <cfargument name="userID" type="numeric" required="yes" > 
-            <cfquery name="local.getExcel"  >
+            <cfquery name="getExcel"  >
                 SELECT *
                 FROM contacts
                 where userID =<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.userID#"   >
             </cfquery>
-            <cfset thisPath = ExpandPath("*.*")>
-            <cfset f_dir = GetDirectoryFromPath(thisPath)>
-            <cfset f_name = "#dateformat(now(), 'mmddyy')##timeformat(now(), 'hhmm')#.csv">
-            <cffile action="WRITE" file="#f_dir##f_name#"
+            <cfset variables.thisPath = expandPath('.') & '/images/'> 
+            <cfset variables.f_dir = GetDirectoryFromPath(variables.thisPath)>
+            <cfset variables.f_name = "#dateformat(now(), 'mmddyy')##timeformat(now(), 'hhmm')#.csv">
+            <cffile action="WRITE"  file="#variables.f_dir##variables.f_name#"
             output="Title, Name,Phone, Contact Email,Gender,DOB,Address,Street,Pincode,Image" addnewline="Yes">  
             <cfloop query="getExcel">
-                <cfif #attachment# NEQ ''>
-                    <cfset  imagesrc="#f_dir#/contactimages/#attachment#"/>
+                <cfif attachment NEQ ''>
+                    <cfset  variables.imagesrc="#f_dir#/contactimages/#attachment#"/>
                 <cfelse> 
-                    <cfif #gender# EQ 'Female'>
-                        <cfset imagesrc="./images/no-female.jpg"/>
+                    <cfif gender EQ 'Female'>
+                        <cfset variables.imagesrc="#f_dir#/images/no-female.jpg"/>
                     <cfelse>
-                        <cfset imagesrc="./images/no-man.png"/>
+                        <cfset variables.imagesrc="#f_dir#/images/no-man.png"/> 
                     </cfif>	
                 </cfif>
-                <cffile action="APPEND" file="#f_dir##f_name#"
-                output="#title#, #firstName# #lastName#, #phoneNumber#, #email#, #gender#,#dob#,#address#,#street#,#pincode#,#imagesrc#"
+                <cffile action="APPEND" file="#variables.f_dir##variables.f_name#"
+                output="#title#, #firstName# #lastName#, #phoneNumber#, #email#, #gender#,#dob#,#address#,#street#,#pincode#,#variables.imagesrc#"
                 addnewline="Yes">
             </cfloop>
-            <br>
-            <cfset local.theLink = "/cf_addressbook/" & f_name>
-            <cfreturn local.theLink/>   
+            <br> 
+            <cfset variables.theLink = "/cf_addressbook/images/" & variables.f_name>
+            <cfreturn variables.theLink/>   
     </cffunction> 
-    <!---get pdf--->
-    <cffunction name="getPdf" access="remote"  output="false"  >   	 
+    <cffunction name="getPdf" access="remote" hint="get pdf" output="false"  >   	 
         <cfargument name="userID" type="numeric" required="yes" >    
-            <cfquery name = "local.pdfData"> 
+            <cfquery name = "pdfData"> 
                 SELECT *
                 FROM contacts
                 where userID =<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.userID#">
             </cfquery>
-            <cfreturn local.pdfData/>       
+            <cfreturn variables.pdfData/>       
     </cffunction>  
-     <!---update profile image --->
-    <cffunction name="updateProfile" access="remote"  output="yes"  returnType="any" returnFormat="JSON" >	 
-    <cfargument name="userID" type="numeric" required="yes" >
-    <cfargument name="userImg" type="string"  >
-    <cfset variables.validMimeTypes =  {
-                                'image/jpeg': {extension: 'jpg'}
-                                ,'image/png': {extension: 'png'},'image/jpg': {extension: 'jpg'}
-                                    } />
-    <cfset variables.thisPath=expandPath('.') & '/userimage/'>
-    <cfset variables.f_dir=GetDirectoryFromPath(variables.thisPath)>
-    <cffile action="upload" filefield="userImg" destination="#variables.f_dir#"
-    nameconflict="makeunique" result="uploadResult">
-    <cfquery name = "updateContact" result="res"> 
-        update addressbook
-        set 
-        userImage= <cfqueryparam value = "#arguments.userImg#" cfsqltype = "cf_sql_varchar">
-        where userID= <cfqueryparam value = "#arguments.userID#" cfsqltype = "cf_sql_integer">
-    </cfquery>          
-    <cfreturn uploadResult>
-    </cffunction> 
+    <cffunction name="updateProfile" access="remote" hint="update profile image" output="false" >	
+        <cfset variables.thisPath=expandPath('..') & '/userimage/' />
+            <cfset variables.f_dir=GetDirectoryFromPath(variables.thisPath) />
+		<cffile action="upload" filefield="userImg"  destination="#variables.f_dir#" mode="777" nameconflict="makeunique" result="uploadResult">	
+		<cfif uploadResult.fileWasSaved>
+			<cfset variables.user_imge = #uploadResult.serverFile#>
+            <cfquery name = "updateContact" result="res">  
+                update addressbook 
+                set 
+                userImage= <cfqueryparam value = "#variables.user_imge#" cfsqltype = "cf_sql_varchar">
+                where userID= <cfqueryparam value = "#session.userID#" cfsqltype = "cf_sql_integer">
+            </cfquery> 
+		</cfif>					
+	</cffunction>
+    <cffunction name="getUserImage" access="public" hint="get user image" output="false"  >   	 
+        <cfargument name="userID" type="numeric" required="yes" >    
+            <cfquery name = "userImage"> 
+                SELECT userImage
+                FROM addressbook
+                where userID =<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.userID#">
+            </cfquery>
+            <cfreturn variables.userImage/>       
+    </cffunction>  
+    <cffunction name="searchUser" access="remote" hint="email alredy exist or not" returnFormat="JSON">
+        <cfargument name="emailID" type="any" required="true">
+        <cfquery name="searchUserMail">
+                SELECT emailID
+                        FROM addressbook 
+                WHERE emailID = <cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.emailID#">             
+        </cfquery> 
+        <cfset variables.cfcResults = searchUserMail.recordcount>
+        <cfif cfcResults NEQ 0>
+            <cfset variables.cfcResults1 = "Error">    
+        <cfelse>
+            <cfset variables.cfcResults1 = "Success">             
+        </cfif>
+        <cfif variables.cfcResults1 == "Error">
+            <cfreturn false>
+        <cfelse>
+            <cfreturn  true>
+        </cfif>
+    </cffunction>
+    <cffunction name="searchUserName" access="remote" hint="user name alredy exist or not" returnFormat="JSON">
+        <cfargument name="userName" type="any" required="true">
+        <cfquery name="searchUserName">
+                SELECT emailID
+                        FROM addressbook 
+                WHERE userName = <cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.userName#">             
+        </cfquery> 
+        <cfset cfcResults = searchUserName.recordcount>
+        <cfif cfcResults NEQ 0>
+            <cfset variables.cfcResults1 = "Error">    
+        <cfelse>
+            <cfset variables.cfcResults1 = "Success">             
+        </cfif>
+        <cfif variables.cfcResults1 == "Error">
+            <cfreturn false>
+        <cfelse>
+            <cfreturn  true>
+        </cfif>
+    </cffunction>
 </cfcomponent> 

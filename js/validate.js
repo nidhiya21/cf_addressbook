@@ -50,7 +50,6 @@ const checkConfirmPassword = () => {
     // check confirm password
     const confirmPassword = confirmPasswordEl.value.trim();
     const password = passwordEl.value.trim();
-
     if (!isRequired(confirmPassword)) {
         showError(confirmPasswordEl, 'Please enter the password again');
     } else if (password !== confirmPassword) {
@@ -72,29 +71,21 @@ const isPasswordSecure = (password) => {
 const isRequired = value => value === '' ? false : true;
 const isBetween = (length, min, max) => length < min || length > max ? false : true;
 const showError = (input, message) => {
-    // get the form-field element
     const formField = input.parentElement;
-    // add the error class
     formField.classList.remove('success');
     formField.classList.add('error1');
-    // show the error message
     const error1 = formField.querySelector('small');
     error1.textContent = message;
 };
 const showSuccess = (input) => {
-    // get the form-field element
     const formField = input.parentElement;
-    // remove the error class
     formField.classList.remove('error1');
     formField.classList.add('success');
-    // hide the error message
     const error1 = formField.querySelector('small');
     error1.textContent = '';
 }
 form.addEventListener('submit', function (e) {
-    // prevent the form from submitting
     e.preventDefault();
-    // validate fields
     let isUsernameValid = checkUsername(),  
         isEmailValid = checkEmail(),
         isPasswordValid = checkPassword(),
@@ -103,12 +94,12 @@ form.addEventListener('submit', function (e) {
         isEmailValid &&
         isPasswordValid &&
         isConfirmPasswordValid;
-    // submit to the server if the form is valid
     if (isFormValid) {
         const fullName = $('#fullName').val();
         const emailID = $('#emailID').val();
         const userName = $('#userName').val();
         const password = $('#password').val();
+        const confirmpassword = $('#confirmpassword').val();
         $.ajax({
         type:"POST", 
         url: 'components/login.cfc', 
@@ -120,13 +111,15 @@ form.addEventListener('submit', function (e) {
                 fullName:fullName,
                 emailID:emailID,
                 userName:userName,
-                password:password
+                password:password,
+                confirmpassword:confirmpassword
                },
                success: function(response) {
+                  // console.log(response);
                 if (response){            
-                window.location='account.cfm'     
-            }
-        }
+                     window.location='account.cfm'     
+                } 
+                } 
         });             
     }
 });
@@ -159,4 +152,55 @@ form.addEventListener('input', debounce(function (e) {
             break;
     }
 }));
+jQuery(document).ready(function(){
+    var $liveSearch = $('.usremail');
+    $("#emailID").keyup(function(){
+    var useremail = $(this).val();
+    if(useremail != ''){
+        $.ajax({
+        url: 'components/contact.cfc',
+        async: false,
+        data: 
+            { 
+                method: "searchUser",
+                emailID:useremail},
+                success: function(data) {
+                    if (data==true) {              
+                    } 
+                    else {
+                        var msg = 'This Email id alredy existing in our system'
+                        $liveSearch.css('display','block').html(msg);
+                    }                    
+                }
+         });
+        } 
+    });
+
+});
+jQuery(document).ready(function(){
+    var $liveSearch = $('.usrvalid');
+    $("#userName").keyup(function(){
+    var userName = $(this).val();
+    if(userName != ''){
+        $.ajax({
+        url: 'components/contact.cfc',
+        async: false,
+        data: 
+            { 
+                method: "searchUserName",
+                userName:userName},
+                success: function(data) {
+                    if (data==true) {              
+                    } 
+                    else {
+                        var msg = 'This User Name  alredy existing in our system'
+                        $liveSearch.css('display','block').html(msg);
+                    }                    
+                }
+         });
+        } 
+    });
+
+});
+
 

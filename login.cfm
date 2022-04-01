@@ -14,7 +14,7 @@
 					<cfinvokeargument name="userName"  value = "#form.userName#" />
 					<cfinvokeargument name="password"  value = "#form.password#" />
 				</cfinvoke>
-				<cfset errors = #validationRes#>
+				<cfset variables.errors = validationRes>
 				<cfset StructClear(Session)> 
 			<cfelse>
 				<cfinvoke component="components.login" method="getUsers" returnvariable="result">
@@ -22,13 +22,9 @@
 					<cfinvokeargument name="password"  value = "#form.password#" />
 				</cfinvoke>  
 				<cfif result.recordcount EQ 1>
-					<cfset Session.LoggedIn = "1">
-					<cfset Session.userName = "#result.userName#">
-					<cfset Session.emailID = "#result.emailID#">  
-					<cfset Session.userID = "#result.userID#">    
 					<cflocation url="account.cfm" addtoken="No"> 
 				<cfelse>
-					<cfset errors = "Incorrect Username/Password">										
+					<cfset variables.errors = "Incorrect Username/Password">										
 					<cfset StructClear(Session)> 
 				</cfif>
 			</cfif>	
@@ -47,7 +43,7 @@
 							<div class="form-input">
 								<h2>LOGIN</h2>
 								<cfif isDefined("errors")>
-									<div class="error"><cfoutput>#errors#</cfoutput></div>
+									<div class="error"><cfoutput>#variables.errors#</cfoutput></div>
 								</cfif> 
 								<form name="loginForm" method="post">
 									<div class="form-group">
